@@ -29,7 +29,7 @@ export default function AgentDashboard() {
 
   const handleCreate = () => {
     if (!createData.title || !createData.target) return
-ard and vise    createCampaign({ ...createData, target:Number(createData.target), image:'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085806/breast_tumyjm.jpg', creatorId:'agent-001' })
+    createCampaign({ ...createData, target:Number(createData.target), image:'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085806/breast_tumyjm.jpg', creatorId:'agent-001' })
     setShowCreate(false)
     setCreateData({ title:'', shortDesc:'', category:'medical', target:'', location:'', story:'', beneficiary:'' })
   }
