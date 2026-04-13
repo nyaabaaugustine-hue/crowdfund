@@ -72,6 +72,23 @@ export default function CampaignCard({ campaign, delay = 0 }) {
           </div>
         </div>
 
+        {/* Recent Donors List */}
+        {campaign.donors && campaign.donors.length > 0 && (
+          <div className="flex items-center gap-2 mb-4 bg-gray-50/50 p-2 rounded-lg border border-gray-100/50">
+            <div className="flex -space-x-2 overflow-hidden">
+              {campaign.donors.slice(0, 3).map((d, i) => (
+                <div key={i} className="inline-block h-6 w-6 rounded-full bg-white ring-2 ring-gray-50 flex items-center justify-center text-[8px] font-bold text-[#02a95c]">
+                  {d.name === 'Anonymous' ? '?' : d.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                </div>
+              ))}
+            </div>
+            <p className="text-[10px] text-gray-500 font-medium truncate">
+              Latest: <span className="text-gray-900 font-bold">{campaign.donors[0].name}</span>
+              {campaign.donors.length > 1 && <span className="opacity-70"> +{campaign.donors.length - 1} more</span>}
+            </p>
+          </div>
+        )}
+
         {/* Meta */}
         <div className="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-[#F9F6EF]">
           <div className="flex items-center gap-1">

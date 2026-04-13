@@ -126,6 +126,14 @@ export function DataProvider({ children }) {
 
   const getCampaignById = useCallback((id) => campaigns.find(c => c.id === id), [campaigns]);
 
+  const resetData = useCallback(() => {
+    localStorage.removeItem('ghcrowd_campaigns');
+    localStorage.removeItem('ghcrowd_transactions');
+    setCampaigns(CAMPAIGNS);
+    setTransactions(TRANSACTIONS);
+    window.location.reload();
+  }, []);
+
   const stats = {
     ...PLATFORM_STATS,
     totalRaised: campaigns.reduce((s, c) => s + c.raised, 0),
@@ -138,7 +146,7 @@ export function DataProvider({ children }) {
     <DataContext.Provider value={{
       campaigns, transactions, notifications, stats,
       donate, approveCampaign, rejectCampaign, flagCampaign,
-      createCampaign, improveStory, getCampaignById,
+      createCampaign, improveStory, getCampaignById, resetData,
     }}>
       {children}
     </DataContext.Provider>

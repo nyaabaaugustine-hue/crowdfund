@@ -4,12 +4,12 @@ import { Shield, CheckCircle, XCircle, Flag, Users, TrendingUp, Eye, DollarSign,
 import Navbar from '../../components/Navbar'
 import { useAuth } from '../../context/AuthContext'
 import { useData } from '../../context/DataContext'
-import { formatGHS, getProgressPercent, USERS, MONTHLY_DATA, CATEGORIES } from '../../data/seed'
+import { formatGHS, getProgressPercent, USERS, MONTHLY_DATA, CATEGORIES, PLATFORM_STATS } from '../../data/seed'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LineChart, Line } from 'recharts'
 
 export default function AdminDashboard() {
   const { user } = useAuth()
-  const { campaigns, transactions, stats, approveCampaign, rejectCampaign, flagCampaign } = useData()
+  const { campaigns, transactions, stats, approveCampaign, rejectCampaign, flagCampaign, resetData } = useData()
   const [activeTab, setActiveTab] = useState('campaigns')
   const [statusFilter, setStatusFilter] = useState('all')
   const [search, setSearch] = useState('')
@@ -109,6 +109,12 @@ export default function AdminDashboard() {
               <h1 className="font-display font-bold text-2xl">Admin Control Center</h1>
               <p className="text-blue-200 text-sm">Logged in as {user.name}</p>
             </div>
+            <button 
+              onClick={resetData}
+              className="bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2 rounded-xl text-xs font-bold transition-all"
+            >
+              🔄 Sync & Reset Platform Data
+            </button>
           </div>
           {/* Platform stats */}
           <div className="relative grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-white/20">

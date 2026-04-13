@@ -62,10 +62,10 @@ export default function Navbar() {
                 </Link>
                 <div className="space-y-5">
                   {[
-                    { title: 'Categories', desc: 'Browse fundraisers by category', link: '/explore' },
-                    { title: 'Crisis relief', desc: 'Donate to verified relief', link: '/explore?cat=emergency' },
-                    { title: 'Social Impact Funds', desc: 'Direct support for urgent needs', link: '/explore' },
-                    { title: 'Supporter Space', desc: 'Inspiration, FAQs, and where to give', link: '#' },
+                    { title: 'Categories', desc: 'Browse fundraisers by category', link: '/categories' },
+                    { title: 'Crisis relief', desc: 'Donate to verified relief', link: '/crisis-relief' },
+                    { title: 'Social Impact Funds', desc: 'Direct support for urgent needs', link: '/social-impact' },
+                    { title: 'Supporter Space', desc: 'Inspiration, FAQs, and where to give', link: '/supporter-space' },
                   ].map((item, idx) => (
                     <Link key={idx} to={item.link} onClick={() => setDonateDropOpen(false)} className="group/item block">
                       <p className="text-sm font-bold text-gray-900 group-hover/item:text-[#02a95c] transition-colors">{item.title}</p>
@@ -93,14 +93,14 @@ export default function Navbar() {
                 </Link>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-5">
                   {[
-                    { title: 'How to start a GhCrowd', desc: 'Step-by-step help, examples, and more', link: '#' },
-                    { title: 'Fundraising categories', desc: 'Find the right category for you', link: '/explore' },
-                    { title: 'Team fundraising', desc: 'Fundraise together with a team', link: '#' },
-                    { title: 'Fundraising Blog', desc: 'Resources, tips, and more', link: '#' },
-                    { title: 'Fundraising tips', desc: 'The ultimate fundraising tips guide', link: '#' },
-                    { title: 'Fundraising ideas', desc: 'Ideas to spark your creativity', link: '#' },
-                    { title: 'Charity fundraising', desc: 'Fundraise for a charity', link: '/explore?cat=community' },
-                    { title: 'Sign up as a nonprofit', desc: 'Claim your nonprofit', link: '/login' },
+                    { title: 'How to start a GhCrowd', desc: 'Step-by-step help, examples, and more', link: '/start' },
+                    { title: 'Fundraising categories', desc: 'Find the right category for you', link: '/categories' },
+                    { title: 'Team fundraising', desc: 'Fundraise together with a team', link: '/team-fundraising' },
+                    { title: 'Fundraising Blog', desc: 'Resources, tips, and more', link: '/blog' },
+                    { title: 'Fundraising tips', desc: 'The ultimate fundraising tips guide', link: '/tips' },
+                    { title: 'Fundraising ideas', desc: 'Ideas to spark your creativity', link: '/tips#ideas' },
+                    { title: 'Charity fundraising', desc: 'Fundraise for a charity', link: '/charity' },
+                    { title: 'Sign up as a nonprofit', desc: 'Claim your nonprofit', link: '/charity#signup' },
                   ].map((item, idx) => (
                     <Link key={idx} to={item.link} onClick={() => setFundraiseDropOpen(false)} className="group/item block">
                       <p className="text-sm font-bold text-gray-900 group-hover/item:text-[#02a95c] transition-colors">{item.title}</p>

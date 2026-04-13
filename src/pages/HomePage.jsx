@@ -21,19 +21,29 @@ const STATS_CONFIG = [
 
 const HERO_SLIDES = [
   {
-    image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070',
-    title: "Support Education in Rural Ghana",
-    subtitle: "Help us put tablets in the hands of 500 students this year."
+    image: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776097110/slide5_pndb9r.jpg',
+    title: "United for a Better Ghana",
+    subtitle: "Every donation brings hope to a family in need across the nation."
   },
   {
-    image: 'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=2089',
+    image: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776097120/slide2_e1m7pp.jpg',
     title: "Emergency Medical Relief",
     subtitle: "Providing critical care and surgery funds for those in need."
   },
   {
-    image: 'https://images.unsplash.com/photo-1516939884455-1445c8652f83?q=80&w=2070',
+    image: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776097707/slide1_lmjqg2.jpg',
+    title: "Support Education in Rural Ghana",
+    subtitle: "Help us put tablets in the hands of 500 students this year."
+  },
+  {
+    image: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776097719/slide3_npuvnt.jpg',
     title: "Small Business, Big Dreams",
     subtitle: "Empowering local artisans and traders to expand their reach."
+  },
+  {
+    image: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776097721/slide4_yukxzd.jpg',
+    title: "Community Growth Initiatives",
+    subtitle: "Building sustainable infrastructure for a brighter tomorrow."
   }
 ]
 
