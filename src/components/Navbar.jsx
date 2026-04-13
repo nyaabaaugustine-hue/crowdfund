@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Menu, X, Bell, ChevronDown, LogOut, LayoutDashboard, Search } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
@@ -17,6 +17,14 @@ export default function Navbar() {
   const [notifOpen, setNotifOpen] = useState(false)
   const [donateDropOpen, setDonateDropOpen] = useState(false)
   const [fundraiseDropOpen, setFundraiseDropOpen] = useState(false)
+  const [logoLoaded, setLogoLoaded] = useState(false)
+  const logoRef = useRef(null)
+
+  useEffect(() => {
+    if (logoRef.current?.complete) {
+      setLogoLoaded(true)
+    }
+  }, [])
 
   const handleLogout = () => {
     logout()
@@ -30,14 +38,21 @@ export default function Navbar() {
     <nav className="sticky top-0 z-40 bg-white border-b border-[#F0EDE4] shadow-warm">
       <div className="kente-bar" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-        {/* Logo */}
+        {/* Logo with animation */}
         <Link to="/" className="flex items-center gap-2">
-          <img 
-            src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776084296/logo_zsmxnf.png" 
-            alt="Nkabom Fund Logo" 
-            className="w-8 h-8 object-contain"
-          />
-          <span className="font-display font-bold text-gray-900 text-xl">Nkabom Fund</span>
+          <div className="relative w-8 h-8">
+            <div className={`absolute inset-0 bg-[#02a95c]/20 rounded-lg animate-logo-ping opacity-0 ${logoLoaded ? 'opacity-100' : ''}`} />
+            <img 
+              ref={logoRef}
+              src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776084296/logo_zsmxnf.png" 
+              alt="Nkabom Fund Logo" 
+              className={`relative w-8 h-8 object-contain transition-all duration-500 ${logoLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
+              onLoad={() => setLogoLoaded(true)}
+            />
+          </div>
+          <span className={`font-display font-bold text-gray-900 text-xl transition-all duration-300 ${logoLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}>
+            Nkabom Fund
+          </span>
         </Link>
 
         {/* Desktop nav */}
@@ -117,7 +132,7 @@ export default function Navbar() {
 
         {/* Right side */}
         <div className="flex items-center gap-6">
-          <Link to="#" className="hidden md:block text-sm font-bold text-gray-700 hover:text-[#02a95c] transition-colors">About</Link>
+          <Link to="/about" className="hidden md:block text-sm font-bold text-gray-700 hover:text-[#02a95c] transition-colors">About</Link>
           
           {user ? (
             <>
@@ -239,7 +254,7 @@ export default function Navbar() {
           <Link to="/explore" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2 flex items-center gap-2"><Search size={16}/> Search</Link>
           <Link to="/explore" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">Donate</Link>
           <Link to={user ? ROLE_DASH[user.role] : "/login"} onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">Fundraise</Link>
-          <Link to="#" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">About</Link>
+          <Link to="/about" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">About</Link>
           {!user && (
             <Link to="/login" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">Sign in</Link>
           )}

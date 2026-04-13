@@ -80,11 +80,28 @@ export default function Footer() {
           <p>© 2024 Nkabom Fund. Made with <Heart size={11} className="inline text-red-400" /> in Ghana 🇬🇭</p>
           
           <div className="flex items-center gap-4 grayscale opacity-50 hover:opacity-100 transition-opacity">
-            <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085018/newmo_vwzw4r.png" className="h-4 w-auto brightness-0 invert" alt="MTN" />
-            <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085086/tele_1_wfgluk.png" className="h-4 w-auto brightness-0 invert" alt="Telecel" />
-            <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085165/download_1_jclht6.jpg" className="h-4 w-auto brightness-0 invert" alt="AirtelTigo" />
-            <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085269/Visa-Logo-2006_vrk179.png" className="h-4 w-auto brightness-0 invert" alt="Visa" />
-            <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085228/mastr_sotqfd.jpg" className="h-4 w-auto brightness-0 invert" alt="Mastercard" />
+            <svg className="h-6 w-auto" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="80" height="24" rx="4" fill="#FFCC00"/>
+              <text x="40" y="16" textAnchor="middle" fill="#000" fontSize="10" fontWeight="bold" fontFamily="Arial">MTN MoMo</text>
+            </svg>
+            <svg className="h-6 w-auto" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="80" height="24" rx="4" fill="#E60000"/>
+              <text x="40" y="16" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" fontFamily="Arial">Telecel Cash</text>
+            </svg>
+            <svg className="h-6 w-auto" viewBox="0 0 90 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="90" height="24" rx="4" fill="#000"/>
+              <text x="45" y="16" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold" fontFamily="Arial">AirtelTigo</text>
+            </svg>
+            <svg className="h-5 w-auto" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="60" height="20" rx="3" fill="white"/>
+              <text x="30" y="14" textAnchor="middle" fill="#1A1F71" fontSize="8" fontWeight="bold" fontFamily="Arial">VISA</text>
+            </svg>
+            <svg className="h-5 w-auto" viewBox="0 0 40 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="40" height="25" rx="4" fill="white"/>
+              <circle cx="15" cy="12.5" r="8" fill="#EB001B"/>
+              <circle cx="25" cy="12.5" r="8" fill="#F79E1B"/>
+              <path d="M20 6.5C21.5 7.9 22.5 9.9 22.5 12.5C22.5 15.1 21.5 17.1 20 18.5C18.5 17.1 17.5 15.1 17.5 12.5C17.5 9.9 18.5 7.9 20 6.5Z" fill="#FF5F00"/>
+            </svg>
           </div>
 
           <div className="flex gap-5">

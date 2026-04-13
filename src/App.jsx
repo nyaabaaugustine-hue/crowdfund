@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
+import AboutPage from './pages/AboutPage'
 import ExplorePage from './pages/ExplorePage'
 import CampaignDetailPage from './pages/CampaignDetailPage'
 import UserDashboard from './pages/dashboards/UserDashboard'
@@ -40,6 +41,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/campaign/:id" element={<CampaignDetailPage />} />
         <Route path="/categories" element={<CategoriesPage />} />

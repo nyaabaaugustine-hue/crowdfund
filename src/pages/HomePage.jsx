@@ -136,8 +136,16 @@ export default function HomePage() {
                       <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085086/tele_1_wfgluk.png" className="h-4 w-auto object-contain" alt="Telecel Cash" />
                       <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085165/download_1_jclht6.jpg" className="h-4 w-auto object-contain" alt="AirtelTigo" />
                       <span className="h-3 w-px bg-white/20 mx-1" />
-                      <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085269/Visa-Logo-2006_vrk179.png" className="h-4 w-auto object-contain" alt="Visa" />
-                      <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085228/mastr_sotqfd.jpg" className="h-4 w-auto object-contain" alt="Mastercard" />
+                      <svg className="h-5 w-auto" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="60" height="20" rx="3" fill="#1A1F71"/>
+                        <text x="30" y="14" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold" fontFamily="Arial">VISA</text>
+                      </svg>
+                      <svg className="h-5 w-auto" viewBox="0 0 40 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="25" rx="4" fill="#F5F5F5"/>
+                        <circle cx="15" cy="12.5" r="8" fill="#EB001B"/>
+                        <circle cx="25" cy="12.5" r="8" fill="#F79E1B"/>
+                        <path d="M20 6.5C21.5 7.9 22.5 9.9 22.5 12.5C22.5 15.1 21.5 17.1 20 18.5C18.5 17.1 17.5 15.1 17.5 12.5C17.5 9.9 18.5 7.9 20 6.5Z" fill="#FF5F00"/>
+                      </svg>
                     </div>
                   </div>
                 </div>
@@ -194,6 +202,78 @@ export default function HomePage() {
             ))}
           </div>
         </div>
+
+      {/* ABOUT SECTION */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="relative">
+              <div className="relative z-10">
+                <img 
+                  src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776100750/1776084234275_mzdnqt.jpg" 
+                  alt="Ghana community coming together" 
+                  className="w-full h-[500px] object-cover rounded-3xl shadow-2xl"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-[#02a95c]/10 rounded-full -z-0" />
+              <div className="absolute -top-6 -left-6 w-32 h-32 bg-[#F6A800]/10 rounded-full -z-0" />
+              
+              {/* Floating Stats Card */}
+              <div className="absolute -bottom-8 left-8 bg-white rounded-2xl p-6 shadow-xl border border-gray-100 z-20">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-[#02a95c] rounded-xl flex items-center justify-center text-white text-2xl">
+                    🇬🇭
+                  </div>
+                  <div>
+                    <p className="font-display font-black text-2xl text-gray-900">45+</p>
+                    <p className="text-sm text-gray-500">Communities Reached</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <div className="inline-flex items-center gap-2 bg-[#02a95c]/10 px-4 py-2 rounded-full text-sm font-bold text-[#02a95c] mb-6">
+                <span className="w-2 h-2 bg-[#02a95c] rounded-full animate-pulse" />
+                About Nkabom Fund
+              </div>
+              <h2 className="font-display font-bold text-4xl sm:text-5xl text-gray-900 mb-6 leading-tight">
+                Together, We Build<br />
+                <span className="text-[#02a95c]">Stronger Communities</span>
+              </h2>
+              <p className="text-gray-600 text-lg leading-relaxed mb-8">
+                Nkabom Fund was born from a simple belief: when Ghanaians come together, no challenge is too big. 
+                We are Ghana's most trusted crowdfunding platform, connecting those in need with those who care.
+              </p>
+              
+              <div className="space-y-6 mb-8">
+                {[
+                  { icon: '🎯', title: 'Verified Trust', desc: 'Every campaign is identity-verified for your peace of mind' },
+                  { icon: '💚', title: 'Direct Impact', desc: '100% of funds go directly to beneficiaries via MoMo' },
+                  { icon: '🌍', title: 'Pan-Ghana Reach', desc: 'Supporting communities from Accra to Tamale, Kumasi to Cape Coast' },
+                ].map((item) => (
+                  <div key={item.title} className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-[#F9F6EF] rounded-xl flex items-center justify-center text-xl flex-shrink-0">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">{item.title}</h3>
+                      <p className="text-sm text-gray-500">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <Link 
+                to="/start"
+                className="inline-flex items-center gap-2 bg-[#0B4D2B] hover:bg-[#065F46] text-white font-bold px-6 py-3 rounded-xl transition-colors"
+              >
+                Learn More About Us <ArrowRight size={18} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* CATEGORIES */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
@@ -411,138 +491,46 @@ export default function HomePage() {
             }
           `}} />
           
-          <div className="relative">
-            <div className="testimonial-track flex gap-6">
+          {/* Scrolling Reviews - Single Line */}
+          <div className="relative -mx-4 sm:mx-0 overflow-hidden">
+            <div className="testimonial-track flex gap-4 px-4">
               {[
-                { name: 'Akua M.', location: 'Accra', role: 'Campaign Organizer', quote: 'Nkabom Fund helped me raise GHS 25,000 for my mother\'s surgery in just 2 weeks. The verification process gave donors confidence, and the MoMo payments were instant.', rating: 5, emoji: '🏥' },
-                { name: 'Emmanuel K.', location: 'Kumasi', role: 'Small Business Owner', quote: 'I never thought I could raise funds for my kente weaving business online. Thanks to Nkabom Fund, I now employ 5 more women in my community.', rating: 5, emoji: '🧵' },
-                { name: 'Sarah A.', location: 'Takoradi', role: 'University Student', quote: 'Thanks to the donors on Nkabom Fund, I can now pay my university fees. The identity verification made me feel safe and trusted as a fundraiser.', rating: 5, emoji: '🎓' },
-                { name: 'Pastor Mensah', location: 'Cape Coast', role: 'Community Leader', quote: 'We raised GHS 80,000 to rebuild our church school after the floods. Nkabom Fund made it easy for diaspora Ghanaians to contribute.', rating: 5, emoji: '⛪' },
-                { name: 'Abena S.', location: 'Tamale', role: 'NGO Director', quote: 'Our verified NGO status on Nkabom Fund helped us raise 40% more than our previous campaigns. Donors trust the platform.', rating: 5, emoji: '🤝' },
-                { name: 'Kofi B.', location: 'Ho', role: 'Freelance Developer', quote: 'The AI storytelling feature helped me craft a compelling campaign. I reached my GHS 15,000 goal in just 10 days!', rating: 5, emoji: '💻' },
+                { name: 'Akua K.', location: 'Accra', role: 'Medical Campaign', quote: 'Nkabom Fund helped me raise GHS 32,000 for my mother\'s surgery in just 2 weeks!', rating: 5, avatar: 'AK', color: '#02a95c', bg: '#EDFAF2', image: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Emmanuel M.', location: 'Kumasi', role: 'Business Owner', quote: 'I now employ 5 more women thanks to the funds raised. Incredible platform!', rating: 5, avatar: 'EM', color: '#7C3AED', bg: '#F5F3FF', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Sarah A.', location: 'Takoradi', role: 'University Student', quote: 'I can finally pay my university fees. The verification made donors trust me.', rating: 5, avatar: 'SA', color: '#0B4D2B', bg: '#EDFAF2', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Pastor K.', location: 'Cape Coast', role: 'Community Leader', quote: 'We raised GHS 80,000 to rebuild our school. Diaspora loved it!', rating: 5, avatar: 'PK', color: '#065F46', bg: '#ECFDF5', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Abena S.', location: 'Tamale', role: 'NGO Director', quote: 'Our verified NGO status helped us raise 40% more than before!', rating: 5, avatar: 'AS', color: '#F59E0B', bg: '#FFFBEB', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Yaw A.', location: 'Ho', role: 'Freelancer', quote: 'AI storytelling feature is amazing! Reached my goal in 10 days!', rating: 5, avatar: 'YA', color: '#DC2626', bg: '#FEF2F2', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face' },
               ].concat([
-                { name: 'Akua M.', location: 'Accra', role: 'Campaign Organizer', quote: 'Nkabom Fund helped me raise GHS 25,000 for my mother\'s surgery in just 2 weeks. The verification process gave donors confidence, and the MoMo payments were instant.', rating: 5, emoji: '🏥' },
-                { name: 'Emmanuel K.', location: 'Kumasi', role: 'Small Business Owner', quote: 'I never thought I could raise funds for my kente weaving business online. Thanks to Nkabom Fund, I now employ 5 more women in my community.', rating: 5, emoji: '🧵' },
-                { name: 'Sarah A.', location: 'Takoradi', role: 'University Student', quote: 'Thanks to the donors on Nkabom Fund, I can now pay my university fees. The identity verification made me feel safe and trusted as a fundraiser.', rating: 5, emoji: '🎓' },
-                { name: 'Pastor Mensah', location: 'Cape Coast', role: 'Community Leader', quote: 'We raised GHS 80,000 to rebuild our church school after the floods. Nkabom Fund made it easy for diaspora Ghanaians to contribute.', rating: 5, emoji: '⛪' },
-                { name: 'Abena S.', location: 'Tamale', role: 'NGO Director', quote: 'Our verified NGO status on Nkabom Fund helped us raise 40% more than our previous campaigns. Donors trust the platform.', rating: 5, emoji: '🤝' },
-                { name: 'Kofi B.', location: 'Ho', role: 'Freelance Developer', quote: 'The AI storytelling feature helped me craft a compelling campaign. I reached my GHS 15,000 goal in just 10 days!', rating: 5, emoji: '💻' },
-              ]).map((testimonial, i) => (
-                <div key={i} className="flex-shrink-0 w-96 bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl hover:border-[#02a95c]/20 transition-all duration-300">
-                  <div className="flex items-center gap-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, j) => (
-                      <span key={j} className="text-yellow-400 text-lg">★</span>
+                { name: 'Akua K.', location: 'Accra', role: 'Medical Campaign', quote: 'Nkabom Fund helped me raise GHS 32,000 for my mother\'s surgery in just 2 weeks!', rating: 5, avatar: 'AK', color: '#02a95c', bg: '#EDFAF2', image: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Emmanuel M.', location: 'Kumasi', role: 'Business Owner', quote: 'I now employ 5 more women thanks to the funds raised. Incredible platform!', rating: 5, avatar: 'EM', color: '#7C3AED', bg: '#F5F3FF', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Sarah A.', location: 'Takoradi', role: 'University Student', quote: 'I can finally pay my university fees. The verification made donors trust me.', rating: 5, avatar: 'SA', color: '#0B4D2B', bg: '#EDFAF2', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Pastor K.', location: 'Cape Coast', role: 'Community Leader', quote: 'We raised GHS 80,000 to rebuild our school. Diaspora loved it!', rating: 5, avatar: 'PK', color: '#065F46', bg: '#ECFDF5', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Abena S.', location: 'Tamale', role: 'NGO Director', quote: 'Our verified NGO status helped us raise 40% more than before!', rating: 5, avatar: 'AS', color: '#F59E0B', bg: '#FFFBEB', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face' },
+                { name: 'Yaw A.', location: 'Ho', role: 'Freelancer', quote: 'AI storytelling feature is amazing! Reached my goal in 10 days!', rating: 5, avatar: 'YA', color: '#DC2626', bg: '#FEF2F2', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face' },
+              ]).map((t, i) => (
+                <div key={i} className="flex-shrink-0 w-[340px] bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-[#02a95c]/30 transition-all duration-300">
+                  <div className="flex items-center gap-1 mb-3">
+                    {[...Array(t.rating)].map((_, j) => (
+                      <svg key={j} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
                     ))}
                   </div>
-                  <p className="text-gray-700 leading-relaxed mb-6 text-sm italic">"{testimonial.quote}"</p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#02a95c] to-[#0B4D2B] rounded-full flex items-center justify-center text-white text-lg">
-                      {testimonial.emoji}
-                    </div>
+                  <p className="text-gray-600 leading-relaxed mb-4 text-sm">"{t.quote}"</p>
+                  <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
+                    <img 
+                      src={t.image} 
+                      alt={t.name} 
+                      className="w-11 h-11 rounded-full object-cover ring-2 ring-gray-100"
+                    />
                     <div>
-                      <p className="font-bold text-gray-900">{testimonial.name}</p>
-                      <p className="text-xs text-gray-500">{testimonial.role} · {testimonial.location}</p>
+                      <p className="font-bold text-gray-900 text-sm">{t.name}</p>
+                      <p className="text-xs text-gray-500">{t.role} · {t.location}</p>
                     </div>
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-          
-          {/* Static testimonials below for mobile */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { name: 'Madam Akosua', location: 'Sunyani', role: 'Market Trader', quote: 'I raised funds to pay for my daughter\'s hospital bills. The Mobile Money option made it easy for everyone to contribute, even those abroad.', emoji: '💊' },
-              { name: 'Yaw Darko', location: 'Kumasi', role: 'Teacher', quote: 'Nkabom Fund helped our school get new desks and textbooks. The transparency reports gave every donor peace of mind.', emoji: '📚' },
-              { name: 'Efua Mensah', location: 'Accra', role: 'Single Mother', quote: 'I was skeptical at first, but the ID verification made donors trust my campaign. I exceeded my goal in 3 weeks!', emoji: '👩‍👧‍👦' },
-            ].map((t, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
-                <div className="flex items-center gap-1 mb-3">
-                  <span className="text-yellow-400">★★★★★</span>
-                </div>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4 italic">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#EDFAF2] rounded-full flex items-center justify-center text-lg">
-                    {t.emoji}
-                  </div>
-                  <div>
-                    <p className="font-bold text-gray-900 text-sm">{t.name}</p>
-                    <p className="text-xs text-gray-500">{t.role} · {t.location}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ABOUT SECTION */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="relative">
-              <div className="relative z-10">
-                <img 
-                  src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776083653/cvb_touqa8.jpg" 
-                  alt="Ghana community coming together" 
-                  className="w-full h-[500px] object-cover rounded-3xl shadow-2xl"
-                />
-              </div>
-              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-[#02a95c]/10 rounded-full -z-0" />
-              <div className="absolute -top-6 -left-6 w-32 h-32 bg-[#F6A800]/10 rounded-full -z-0" />
-              
-              {/* Floating Stats Card */}
-              <div className="absolute -bottom-8 left-8 bg-white rounded-2xl p-6 shadow-xl border border-gray-100 z-20">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-[#02a95c] rounded-xl flex items-center justify-center text-white text-2xl">
-                    🇬🇭
-                  </div>
-                  <div>
-                    <p className="font-display font-black text-2xl text-gray-900">45+</p>
-                    <p className="text-sm text-gray-500">Communities Reached</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <div className="inline-flex items-center gap-2 bg-[#02a95c]/10 px-4 py-2 rounded-full text-sm font-bold text-[#02a95c] mb-6">
-                <span className="w-2 h-2 bg-[#02a95c] rounded-full animate-pulse" />
-                About Nkabom Fund
-              </div>
-              <h2 className="font-display font-bold text-4xl sm:text-5xl text-gray-900 mb-6 leading-tight">
-                Together, We Build<br />
-                <span className="text-[#02a95c]">Stronger Communities</span>
-              </h2>
-              <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                Nkabom Fund was born from a simple belief: when Ghanaians come together, no challenge is too big. 
-                We are Ghana's most trusted crowdfunding platform, connecting those in need with those who care.
-              </p>
-              
-              <div className="space-y-6 mb-8">
-                {[
-                  { icon: '🎯', title: 'Verified Trust', desc: 'Every campaign is identity-verified for your peace of mind' },
-                  { icon: '💚', title: 'Direct Impact', desc: '100% of funds go directly to beneficiaries via MoMo' },
-                  { icon: '🌍', title: 'Pan-Ghana Reach', desc: 'Supporting communities from Accra to Tamale, Kumasi to Cape Coast' },
-                ].map((item) => (
-                  <div key={item.title} className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-[#F9F6EF] rounded-xl flex items-center justify-center text-xl flex-shrink-0">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-1">{item.title}</h3>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <Link 
-                to="/start"
-                className="inline-flex items-center gap-2 bg-[#0B4D2B] hover:bg-[#065F46] text-white font-bold px-6 py-3 rounded-xl transition-colors"
-              >
-                Learn More About Us <ArrowRight size={18} />
-              </Link>
             </div>
           </div>
         </div>
@@ -686,8 +674,16 @@ export default function HomePage() {
                   <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085018/newmo_vwzw4r.png" className="h-4 w-auto brightness-0 invert" alt="MTN MoMo" />
                   <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085086/tele_1_wfgluk.png" className="h-4 w-auto brightness-0 invert" alt="Telecel" />
                   <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085165/download_1_jclht6.jpg" className="h-4 w-auto brightness-0 invert" alt="AirtelTigo" />
-                  <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085269/Visa-Logo-2006_vrk179.png" className="h-4 w-auto brightness-0 invert" alt="Visa" />
-                  <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085228/mastr_sotqfd.jpg" className="h-4 w-auto brightness-0 invert" alt="Mastercard" />
+                  <svg className="h-5 w-auto" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="60" height="20" rx="3" fill="white"/>
+                    <text x="30" y="14" textAnchor="middle" fill="#1A1F71" fontSize="8" fontWeight="bold" fontFamily="Arial">VISA</text>
+                  </svg>
+                  <svg className="h-5 w-auto" viewBox="0 0 40 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="25" rx="4" fill="white"/>
+                    <circle cx="15" cy="12.5" r="8" fill="#EB001B"/>
+                    <circle cx="25" cy="12.5" r="8" fill="#F79E1B"/>
+                    <path d="M20 6.5C21.5 7.9 22.5 9.9 22.5 12.5C22.5 15.1 21.5 17.1 20 18.5C18.5 17.1 17.5 15.1 17.5 12.5C17.5 9.9 18.5 7.9 20 6.5Z" fill="#FF5F00"/>
+                  </svg>
                 </div>
               </div>
             </div>
