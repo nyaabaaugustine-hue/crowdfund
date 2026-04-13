@@ -1,0 +1,282 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background-color: #F9F6EF;
+  color: #1A1A1A;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #F0EDE4; }
+::-webkit-scrollbar-thumb { background: #0B4D2B; border-radius: 3px; }
+
+/* Kente strip — 4 Ghana flag colors */
+.kente-bar {
+  height: 3px;
+  background: linear-gradient(90deg, #CE1126 25%, #FCD116 25% 50%, #006B3F 50% 75%, #1A1A1A 75%);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.anim-fade-up   { animation: fadeUp 0.45s ease-out both; }
+.anim-fade-in   { animation: fadeIn 0.35s ease-out both; }
+.anim-slide-l   { animation: slideLeft 0.4s ease-out both; }
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* Skeleton shimmer */
+.shimmer {
+  background: linear-gradient(90deg, #F0EDE4 25%, #E5DFD3 50%, #F0EDE4 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+/* Progress bar */
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #0B4D2B, #1A8048);
+  transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Campaign card hover */
+.camp-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.camp-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 48px rgba(11,77,43,0.18);
+}
+
+/* Glass panel */
+.glass {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Custom input */
+.gh-input {
+  width: 100%;
+  background: white;
+  border: 1.5px solid #E5DFD3;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.gh-input:focus {
+  border-color: #0B4D2B;
+  box-shadow: 0 0 0 3px rgba(11,77,43,0.1);
+}
+
+/* Verified badge */
+.badge-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #EDFAF2;
+  color: #0B4D2B;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+/* Trust badge */
+.badge-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FFF2C2;
+  color: #7C5200;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* Category pill */
+.cat-pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Stat card */
+.stat-card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  border: 1px solid #F0EDE4;
+  box-shadow: 0 4px 20px rgba(11,77,43,0.07);
+}
+
+/* Role card on login */
+.role-card {
+  background: white;
+  border: 2px solid #E5DFD3;
+  border-radius: 20px;
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+.role-card:hover {
+  border-color: #0B4D2B;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(11,77,43,0.15);
+}
+.role-card.selected {
+  border-color: #0B4D2B;
+  background: #EDFAF2;
+}
+
+/* Dashboard sidebar */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4B5563;
+  transition: all 0.18s;
+  cursor: pointer;
+}
+.sidebar-link:hover {
+  background: #EDFAF2;
+  color: #0B4D2B;
+}
+.sidebar-link.active {
+  background: #0B4D2B;
+  color: white;
+}
+
+/* Table */
+.gh-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9CA3AF;
+  border-bottom: 1px solid #F0EDE4;
+}
+.gh-table td {
+  padding: 14px;
+  font-size: 14px;
+  border-bottom: 1px solid #F9F6EF;
+}
+.gh-table tr:last-child td { border-bottom: none; }
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+@media (min-width: 640px) {
+  .modal-overlay { align-items: center; }
+}
+
+.modal-box {
+  background: white;
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  max-width: 480px;
+  padding: 32px 24px 40px;
+  animation: fadeUp 0.3s ease-out;
+}
+@media (min-width: 640px) {
+  .modal-box { border-radius: 24px; padding: 40px; }
+}
+
+/* MoMo selector */
+.momo-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1.5px solid #E5DFD3;
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.momo-option:hover,
+.momo-option.selected {
+  border-color: #F6A800;
+  background: #FFFAEB;
+}
+
+/* Amount button */
+.amt-btn {
+  border: 1.5px solid #E5DFD3;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: white;
+  color: #374151;
+}
+.amt-btn:hover,
+.amt-btn.selected {
+  border-color: #0B4D2B;
+  background: #EDFAF2;
+  color: #0B4D2B;
+}
+
+/* Success animation */
+@keyframes successPop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.success-icon { animation: successPop 0.5s cubic-bezier(0.34,1.56,0.64,1); }
