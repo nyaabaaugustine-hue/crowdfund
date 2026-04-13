@@ -11,7 +11,7 @@ export default function BlogPage() {
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
         <div className="max-w-2xl mb-16">
-          <h1 className="font-display font-black text-5xl text-gray-900 mb-6">GhCrowd Blog</h1>
+          <h1 className="font-display font-black text-5xl text-gray-900 mb-6">Nkabom Fund Blog</h1>
           <p className="text-gray-500 text-xl leading-relaxed">Inspiring stories of impact, fundraising guides, and the latest news from our community.</p>
         </div>
 

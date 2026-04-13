@@ -12,7 +12,7 @@ export default function Footer() {
             <div className="w-8 h-8 rounded-lg bg-[#F6A800] flex items-center justify-center">
               <span className="text-[#0B4D2B] font-display font-bold text-sm">G</span>
             </div>
-            <span className="font-display font-bold text-white text-xl">GhCrowd</span>
+            <span className="font-display font-bold text-white text-xl">Nkabom Fund</span>
           </div>
           <p className="text-sm text-green-200 leading-relaxed mb-5">
             Ghana's most trusted crowdfunding platform. Raising funds for the things that matter most — together.
@@ -77,7 +77,7 @@ export default function Footer() {
 
       <div className="border-t border-white/10 px-4 py-5">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-green-300">
-          <p>© 2024 GhCrowd. Made with <Heart size={11} className="inline text-red-400" /> in Ghana 🇬🇭</p>
+          <p>© 2024 Nkabom Fund. Made with <Heart size={11} className="inline text-red-400" /> in Ghana 🇬🇭</p>
           
           <div className="flex items-center gap-4 grayscale opacity-50 hover:opacity-100 transition-opacity">
             <img src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085018/newmo_vwzw4r.png" className="h-4 w-auto brightness-0 invert" alt="MTN" />

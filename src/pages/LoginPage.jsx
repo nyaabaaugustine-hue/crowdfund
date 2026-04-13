@@ -69,10 +69,10 @@ export default function LoginPage() {
           <div className="w-10 h-10 rounded-xl bg-[#0B4D2B] flex items-center justify-center shadow-warm">
             <span className="text-[#F6A800] font-display font-bold text-lg">G</span>
           </div>
-          <span className="font-display font-bold text-[#0B4D2B] text-2xl">GhCrowd</span>
+          <span className="font-display font-bold text-[#0B4D2B] text-2xl">Nkabom Fund</span>
         </div>
         <h1 className="font-display font-bold text-3xl sm:text-4xl text-gray-900 mb-3">
-          Welcome to GhCrowd 🇬🇭
+          Welcome to Nkabom Fund 🇬🇭
         </h1>
         <p className="text-gray-500 text-base max-w-md mx-auto">
           Ghana's most trusted crowdfunding platform. Choose how you'd like to continue.

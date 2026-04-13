@@ -43,7 +43,7 @@ export default function CharityFundraisingPage() {
         <div className="mt-24 p-12 bg-[#F9F6EF] rounded-[40px] border border-gray-100 flex flex-col md:flex-row items-center gap-10">
           <div className="flex-1">
             <h2 className="font-display font-bold text-3xl text-gray-900 mb-4">Are you a registered NGO?</h2>
-            <p className="text-gray-600 leading-relaxed mb-6">GhCrowd supports foundations across Ghana. By claiming your nonprofit, you can manage multiple campaigns under one verified profile and access lower platform fees.</p>
+            <p className="text-gray-600 leading-relaxed mb-6">Nkabom Fund supports foundations across Ghana. By claiming your nonprofit, you can manage multiple campaigns under one verified profile and access lower platform fees.</p>
             <ul className="space-y-3 mb-8">
               {['Tax-deductible receipts', 'Dedicated support manager', 'Custom donor data exports'].map(item => (
                 <li key={item} className="flex items-center gap-2 text-sm font-bold text-gray-700"><CheckCircle size={16} className="text-[#02a95c]" /> {item}</li>

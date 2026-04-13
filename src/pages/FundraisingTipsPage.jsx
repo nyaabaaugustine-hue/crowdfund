@@ -10,7 +10,7 @@ export default function FundraisingTipsPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="max-w-3xl mb-16">
           <h1 className="font-display font-black text-5xl text-gray-900 mb-6">The ultimate fundraising tips guide</h1>
-          <p className="text-gray-500 text-xl leading-relaxed">How to turn a good cause into a great movement. Learn from the most successful organizers on GhCrowd.</p>
+          <p className="text-gray-500 text-xl leading-relaxed">How to turn a good cause into a great movement. Learn from the most successful organizers on Nkabom Fund.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">

@@ -267,7 +267,7 @@ export default function CampaignDetailPage() {
               <h4 className="text-xs font-bold text-[#0B4D2B] uppercase tracking-wider mb-3">Why Trust This Campaign</h4>
               <ul className="space-y-2">
                 {[
-                  campaign.verified ? '✅ Identity verified by GhCrowd' : '🔄 Identity verification pending',
+                  campaign.verified ? '✅ Identity verified by Nkabom Fund' : '🔄 Identity verification pending',
                   '🔒 Funds held securely until disbursement',
                   '📊 Full donor & transaction reports',
                   '📱 Mobile Money disbursement',

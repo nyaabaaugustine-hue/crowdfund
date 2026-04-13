@@ -34,10 +34,10 @@ export default function Navbar() {
         <Link to="/" className="flex items-center gap-2">
           <img 
             src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776084296/logo_zsmxnf.png" 
-            alt="GhCrowd Logo" 
+            alt="Nkabom Fund Logo" 
             className="w-8 h-8 object-contain"
           />
-          <span className="font-display font-bold text-gray-900 text-xl">GhCrowd</span>
+          <span className="font-display font-bold text-gray-900 text-xl">Nkabom Fund</span>
         </Link>
 
         {/* Desktop nav */}
@@ -93,7 +93,7 @@ export default function Navbar() {
                 </Link>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-5">
                   {[
-                    { title: 'How to start a GhCrowd', desc: 'Step-by-step help, examples, and more', link: '/start' },
+                    { title: 'How to start a fundraiser', desc: 'Step-by-step help, examples, and more', link: '/start' },
                     { title: 'Fundraising categories', desc: 'Find the right category for you', link: '/categories' },
                     { title: 'Team fundraising', desc: 'Fundraise together with a team', link: '/team-fundraising' },
                     { title: 'Fundraising Blog', desc: 'Resources, tips, and more', link: '/blog' },
@@ -220,7 +220,7 @@ export default function Navbar() {
             to={user ? ROLE_DASH[user.role] : "/login"}
             className="hidden sm:block border-2 border-[#02a95c] text-[#02a95c] hover:bg-[#02a95c] hover:text-white transition-all font-bold px-5 py-2 rounded-xl text-sm whitespace-nowrap"
           >
-            Start a GhCrowd
+            Start a Fundraiser
           </Link>
 
           {/* Mobile menu */}
@@ -243,7 +243,7 @@ export default function Navbar() {
           {!user && (
             <Link to="/login" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">Sign in</Link>
           )}
-          <Link to={user ? ROLE_DASH[user.role] : "/login"} onClick={() => setMenuOpen(false)} className="bg-[#02a95c] text-white text-sm font-bold px-4 py-3 rounded-xl text-center mt-2">Start a GhCrowd</Link>
+          <Link to={user ? ROLE_DASH[user.role] : "/login"} onClick={() => setMenuOpen(false)} className="bg-[#02a95c] text-white text-sm font-bold px-4 py-3 rounded-xl text-center mt-2">Start a Fundraiser</Link>
         </div>
       )}
     </nav>

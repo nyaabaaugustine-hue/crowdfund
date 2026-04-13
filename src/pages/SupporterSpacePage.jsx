@@ -10,7 +10,7 @@ export default function SupporterSpacePage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-20">
         <div className="text-center mb-16">
           <h1 className="font-display font-black text-5xl text-gray-900 mb-6">
-            Your guide to giving on GhCrowd
+            Your guide to giving on Nkabom Fund
           </h1>
           <p className="text-gray-500 text-xl leading-relaxed">
             Everything you need to know about staying safe, finding inspiration, and making a difference.
@@ -21,7 +21,7 @@ export default function SupporterSpacePage() {
           <section>
             <div className="flex items-center gap-3 mb-6">
               <ShieldCheck className="text-[#02a95c]" size={28} />
-              <h2 className="font-display font-bold text-2xl">The GhCrowd Giving Guarantee</h2>
+              <h2 className="font-display font-bold text-2xl">The Nkabom Fund Giving Guarantee</h2>
             </div>
             <p className="text-gray-600 leading-relaxed mb-4">
               Your trust is our most valuable asset. Our Giving Guarantee protects your donation from fraud. In the rare event that something isn't right, we will work with you to ensure your funds reach the intended cause or provide a refund.

@@ -23,8 +23,8 @@ export default function CrisisReliefPage() {
             <h1 className="font-display font-black text-4xl sm:text-5xl text-gray-900 mb-6">
               Donate to verified crisis relief
             </h1>
-            <p className="text-gray-600 text-lg font-medium leading-relaxed">
-              When disaster strikes, every second counts. GhCrowd works with local agents and NGOs to ensure your emergency donations reach those in immediate need safely and quickly.
+              <p className="text-gray-600 text-lg font-medium leading-relaxed">
+              When disaster strikes, every second counts. Nkabom Fund works with local agents and NGOs to ensure your emergency donations reach those in immediate need safely and quickly.
             </p>
           </div>
         </div>

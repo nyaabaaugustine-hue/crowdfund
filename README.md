@@ -1,6 +1,6 @@
-# GhCrowd — Professional Crowdfunding for Ghana 🇬🇭
+# Nkabom Fund — Professional Crowdfunding for Ghana 🇬🇭
 
-GhCrowd is a high-caliber crowdfunding platform inspired by GoFundMe, specifically tailored for the Ghanaian market. It supports local payment methods including MTN MoMo, Telecel Cash, and AirtelTigo, alongside global card payments.
+Nkabom Fund is a high-caliber crowdfunding platform inspired by GoFundMe, specifically tailored for the Ghanaian market. It supports local payment methods including MTN MoMo, Telecel Cash, and AirtelTigo, alongside global card payments.
 
 ## Features
 - **Verified Campaigns:** Trust-first approach for medical, education, and community needs.
