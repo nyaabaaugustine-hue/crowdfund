@@ -9,7 +9,7 @@ export default {
       },
       colors: {
         primary: {
-          50: '#EDFAF2',
+          50:  '#EDFAF2',
           100: '#D0F0DF',
           200: '#9ADDB8',
           300: '#5DC48E',
@@ -21,7 +21,7 @@ export default {
           900: '#031A10',
         },
         gold: {
-          50: '#FFFAEB',
+          50:  '#FFFAEB',
           100: '#FFF2C2',
           200: '#FFE480',
           300: '#FFD13D',
@@ -33,7 +33,7 @@ export default {
           900: '#241800',
         },
         cream: {
-          50: '#FEFCF7',
+          50:  '#FEFCF7',
           100: '#F9F6EF',
           200: '#F0EDE4',
           300: '#E5DFD3',
@@ -42,12 +42,27 @@ export default {
         },
       },
       boxShadow: {
-        warm: '0 4px 20px rgba(11,77,43,0.07)',
+        warm:    '0 4px 20px rgba(11,77,43,0.07)',
         'warm-md': '0 8px 32px rgba(11,77,43,0.12)',
         'warm-lg': '0 16px 48px rgba(11,77,43,0.18)',
-        gold: '0 4px 20px rgba(246,168,0,0.3)',
+        gold:    '0 4px 20px rgba(246,168,0,0.30)',
       },
     },
   },
   plugins: [],
+  // Safelist ensures Tailwind does not purge runtime-generated class names
+  safelist: [
+    'shadow-warm',
+    'shadow-warm-md',
+    'shadow-warm-lg',
+    'shadow-gold',
+    'badge-verified',
+    'badge-pending',
+    'badge-rejected',
+    'badge-flagged',
+    'badge-trust',
+    'anim-fade-up',
+    'anim-fade-in',
+    'anim-slide-l',
+  ],
 }
