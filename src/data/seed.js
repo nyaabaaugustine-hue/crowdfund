@@ -453,7 +453,7 @@ Football gave me a way out. I want to give these boys the same chance. Please he
     id: 'camp-011',
     title: 'Life-Saving Heart Surgery for Baby Sena',
     shortDesc: 'Sena is only 8 months old and was born with a hole in her heart. She needs urgent surgery outside Ghana.',
-    story: `Baby Sena was born a fighter, but she is facing a battle no infant should. Diagnosed with a Ventricular Septal Defect (VSD), her heart is working twice as hard just to keep her breathing. 
+    story: `Baby Sena was born a fighter, but she is facing a battle no infant should. Diagnosed with a Ventricular Septal Defect (VSD), her heart is working twice as hard just to keep her breathing.
 
 Her doctors at the National Cardiothoracic Centre have recommended surgery at a specialized facility in India. The total cost, including travel and post-operative care, is GHS 180,000. Every cedi you give brings her one step closer to her first birthday.`,
     category: 'medical',
@@ -481,7 +481,8 @@ export const BLOG_POSTS = [
     image: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776097707/slide1_lmjqg2.jpg',
     date: 'March 15, 2024',
     category: 'Impact',
-    excerpt: 'Read about the incredible stories of resilience and community support making a difference in remote villages.',
+    readTime: '6 min read',
+    excerpt: 'Read about the incredible stories of resilience and community support making a difference in remote villages across the Volta, Northern, and Bono regions.',
     link: '#'
   },
   {
@@ -490,7 +491,8 @@ export const BLOG_POSTS = [
     image: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776097719/slide3_npuvnt.jpg',
     date: 'March 10, 2024',
     category: 'Tips & Guides',
-    excerpt: 'Maximize your fundraising potential with these expert strategies and best practices.',
+    readTime: '4 min read',
+    excerpt: 'Maximize your fundraising potential with these expert strategies and best practices drawn from our top-performing campaigns.',
     link: '#'
   },
   {
@@ -499,7 +501,8 @@ export const BLOG_POSTS = [
     image: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776097721/slide4_yukxzd.jpg',
     date: 'March 01, 2024',
     category: 'Community',
-    excerpt: 'Discover how our dedicated agents are helping individuals and organizations achieve their goals.',
+    readTime: '5 min read',
+    excerpt: 'Discover how our dedicated agents are helping individuals and organisations achieve their fundraising goals across every region of Ghana.',
     link: '#'
   },
 ];
