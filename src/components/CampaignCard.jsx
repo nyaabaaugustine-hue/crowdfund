@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { MapPin, Clock, Users, CheckCircle, TrendingUp } from 'lucide-react'
 import { getCategoryStyle, formatGHS, getProgressPercent } from '../data/seed'
+import ImageWithFallback from './ImageWithFallback'
 
 export default function CampaignCard({ campaign, delay = 0 }) {
   const cat = getCategoryStyle(campaign.category)
@@ -14,12 +15,12 @@ export default function CampaignCard({ campaign, delay = 0 }) {
       style={{ animationDelay: `${delay}ms` }}
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden bg-[#F0EDE4]">
-        <img
+      <div className="relative h-48 overflow-hidden">
+        <ImageWithFallback
           src={campaign.image}
           alt={campaign.title}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-          loading="lazy"
+          style={{ minHeight: '192px' }}
         />
         {/* Overlay badges */}
         <div className="absolute top-3 left-3 flex gap-2">

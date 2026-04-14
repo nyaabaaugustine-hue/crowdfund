@@ -1,8 +1,15 @@
+import { useEffect } from 'react'
 import { X, MapPin, Clock, Users, CheckCircle, Flag, TrendingUp, Calendar, Heart, Eye, AlertTriangle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { formatGHS, getProgressPercent, getCategoryStyle } from '../data/seed'
 
 export default function CampaignDetailModal({ campaign, onClose, transactions }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
   const pct = getProgressPercent(campaign.raised, campaign.target)
   const cat = getCategoryStyle(campaign.category)
   const campaignTransactions = transactions?.filter(t => t.campaignId === campaign.id) || []
@@ -11,11 +18,11 @@ export default function CampaignDetailModal({ campaign, onClose, transactions })
 
   return (
     <div 
-      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '16px', overflowY: 'auto' }}
       onClick={e => e.target === e.currentTarget && onClose()}
     >
       <div 
-        style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '672px', maxHeight: '90vh', overflowY: 'auto', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}
+        style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '672px', marginTop: '20px', marginBottom: '20px', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}
       >
         <button
           onClick={onClose}

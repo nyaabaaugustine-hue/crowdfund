@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowRight, TrendingUp, Heart, Users, Target, Play, ChevronRight, Star, ChevronLeft, ShieldCheck, Lock } from 'lucide-react'
+import { ArrowRight, TrendingUp, Heart, Users, Target, Play, ChevronRight, Star, ChevronLeft, ShieldCheck, Lock, GraduationCap, Church, UsersRound, Building2, Plus, ArrowUpRight } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CampaignCard from '../components/CampaignCard'
@@ -8,6 +8,39 @@ import DonationModal from '../components/DonationModal'
 import { useData } from '../context/DataContext' 
 import { useAuth } from '../context/AuthContext'
 import { formatGHS, CATEGORIES, BLOG_POSTS } from '../data/seed'
+
+const GROUPS = {
+  alumni: [
+    { id: 'alumni-1', name: 'Mfantsipim Old Boys Association', type: 'Alumni', location: 'National', members: '2,400+', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400', campaigns: 12, raised: 'GHS 145,000' },
+    { id: 'alumni-2', name: 'Presbyterian Boys Secondary School Alumni', type: 'Alumni', location: 'Greater Accra', members: '3,100+', image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=400', campaigns: 8, raised: 'GHS 89,000' },
+    { id: 'alumni-3', name: 'Achimota School Alumni Network', type: 'Alumni', location: 'National', members: '5,200+', image: 'https://images.unsplash.com/photo-1580537659466-0a9bfa916a54?w=400', campaigns: 15, raised: 'GHS 210,000' },
+    { id: 'alumni-4', name: 'Holy Child Old Girls Association', type: 'Alumni', location: 'Central', members: '1,800+', image: 'https://images.unsplash.com/photo-1529390079861-591f5a8a1f8b?w=400', campaigns: 6, raised: 'GHS 67,000' },
+    { id: 'alumni-5', name: 'St. Augustine\'s College Old Boys', type: 'Alumni', location: 'Cape Coast', members: '2,000+', image: 'https://images.unsplash.com/photo-1562774053-701939374585?w=400', campaigns: 10, raised: 'GHS 120,000' },
+    { id: 'alumni-6', name: 'Aburi Girls Secondary School Alumni', type: 'Alumni', location: 'Eastern', members: '1,500+', image: 'https://images.unsplash.com/photo-1577017040065-650ee4d43339?w=400', campaigns: 7, raised: 'GHS 55,000' },
+  ],
+  churches: [
+    { id: 'church-1', name: 'EPC Pentecost Church', type: 'Church', location: 'Accra', members: '8,000+', image: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=400', campaigns: 24, raised: 'GHS 320,000' },
+    { id: 'church-2', name: 'The Church of Pentecost Ghana', type: 'Church', location: 'National', members: '50,000+', image: 'https://images.unsplash.com/photo-1540555016288-9832208c4a56?w=400', campaigns: 45, raised: 'GHS 890,000' },
+    { id: 'church-3', name: 'Moses Centre Ministries', type: 'Church', location: 'Kumasi', members: '5,000+', image: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400', campaigns: 18, raised: 'GHS 180,000' },
+    { id: 'church-4', name: 'Living Faith Church (Winner\'s Chapel)', type: 'Church', location: 'National', members: '35,000+', image: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?w=400', campaigns: 32, raised: 'GHS 450,000' },
+    { id: 'church-5', name: 'Presbyterian Church of Ghana', type: 'Church', location: 'National', members: '75,000+', image: 'https://images.unsplash.com/photo-1519834089822-321a496OS8ae?w=400', campaigns: 52, raised: 'GHS 720,000' },
+    { id: 'church-6', name: 'Charismatic Evangelicals Fellowship', type: 'Church', location: 'Accra', members: '3,200+', image: 'https://images.unsplash.com/photo-1470790376778-a9fbc86d70e2?w=400', campaigns: 14, raised: 'GHS 156,000' },
+  ],
+  associations: [
+    { id: 'assoc-1', name: 'Ghana Medical Association', type: 'Association', location: 'National', members: '4,500+', image: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400', campaigns: 28, raised: 'GHS 540,000' },
+    { id: 'assoc-2', name: 'Ghana Police Officers Union', type: 'Association', location: 'National', members: '25,000+', image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400', campaigns: 19, raised: 'GHS 280,000' },
+    { id: 'assoc-3', name: 'National Teachers Association', type: 'Association', location: 'National', members: '180,000+', image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400', campaigns: 35, raised: 'GHS 620,000' },
+    { id: 'assoc-4', name: 'Ghana Journalists Association', type: 'Association', location: 'National', members: '3,800+', image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400', campaigns: 11, raised: 'GHS 145,000' },
+    { id: 'assoc-5', name: 'Ghana Bar Association', type: 'Association', location: 'National', members: '12,000+', image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400', campaigns: 16, raised: 'GHS 390,000' },
+    { id: 'assoc-6', name: 'Ghana Nurses Association', type: 'Association', location: 'National', members: '45,000+', image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400', campaigns: 22, raised: 'GHS 310,000' },
+  ]
+}
+
+const GROUP_TYPE_CONFIG = {
+  alumni: { icon: GraduationCap, color: '#1E3A5F', bg: '#EFF6FF', label: 'School Alumni' },
+  churches: { icon: Church, color: '#7C3AED', bg: '#F5F3FF', label: 'Church Groups' },
+  associations: { icon: UsersRound, color: '#0B4D2B', bg: '#EDFAF2', label: 'Professional Associations' },
+}
 
 const STATS_CONFIG = [
   { label: 'Total Raised', getValue: s => formatGHS(s.totalRaised) },
@@ -54,6 +87,7 @@ export default function HomePage() {
   const [donateTarget, setDonateTarget] = useState(null)
   const [liveNotif, setLiveNotif] = useState(null)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [activeGroupTab, setActiveGroupTab] = useState('alumni')
   const featured = campaigns.filter(c => c.status === 'approved' && c.featured).slice(0, 6)
   const urgent = campaigns.filter(c => c.status === 'approved' && c.daysLeft <= 14).slice(0, 8)
   const newsItems = BLOG_POSTS.slice(0, 3)
@@ -294,6 +328,119 @@ export default function HomePage() {
               <span className="text-xs font-semibold text-gray-700">{cat.label}</span>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* AFFINITY GROUPS - Alumni, Churches, Associations */}
+      <section className="bg-gradient-to-b from-white to-[#F9F6EF] py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Header */}
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 bg-[#0B4D2B]/10 text-[#0B4D2B] text-xs font-bold px-4 py-2 rounded-full mb-4">
+              <Users size={14} /> Strategic Partners
+            </div>
+            <h2 className="font-display font-bold text-3xl text-gray-900 mb-3">
+              Communities Raising Funds Together
+            </h2>
+            <p className="text-gray-500 max-w-2xl mx-auto">
+              Alumni associations, church groups, and professional associations are using Nkabom Fund to support their members and causes across Ghana.
+            </p>
+          </div>
+
+          {/* Group Type Tabs */}
+          <div className="flex justify-center gap-2 mb-8">
+            {Object.entries(GROUP_TYPE_CONFIG).map(([key, config]) => {
+              const Icon = config.icon
+              const isActive = activeGroupTab === key
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveGroupTab(key)}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all ${
+                    isActive 
+                      ? 'bg-[#0B4D2B] text-white shadow-lg' 
+                      : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                  }`}
+                >
+                  <Icon size={18} />
+                  {config.label}
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Groups Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {GROUPS[activeGroupTab].map(group => (
+              <div 
+                key={group.id}
+                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-warm hover:shadow-warm-lg hover:-translate-y-1 transition-all duration-300 group"
+              >
+                {/* Image */}
+                <div className="relative h-40 overflow-hidden">
+                  <img 
+                    src={group.image} 
+                    alt={group.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400' }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute top-3 left-3">
+                    <span className="bg-white/90 backdrop-blur text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
+                      {activeGroupTab === 'alumni' && <GraduationCap size={12} />}
+                      {activeGroupTab === 'churches' && <Church size={12} />}
+                      {activeGroupTab === 'associations' && <UsersRound size={12} />}
+                      {group.type}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <h3 className="text-white font-bold text-sm leading-tight line-clamp-2">{group.name}</h3>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-4">
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="text-center p-2 bg-gray-50 rounded-lg">
+                      <p className="font-bold text-gray-900 text-sm">{group.members}</p>
+                      <p className="text-[10px] text-gray-500">Members</p>
+                    </div>
+                    <div className="text-center p-2 bg-gray-50 rounded-lg">
+                      <p className="font-bold text-[#0B4D2B] text-sm">{group.campaigns}</p>
+                      <p className="text-[10px] text-gray-500">Campaigns</p>
+                    </div>
+                    <div className="text-center p-2 bg-gray-50 rounded-lg">
+                      <p className="font-bold text-[#F6A800] text-xs">{group.raised}</p>
+                      <p className="text-[10px] text-gray-500">Raised</p>
+                    </div>
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 text-xs text-gray-400">
+                      <Building2 size={12} />
+                      {group.location}
+                    </div>
+                    <button className="flex items-center gap-1 text-xs font-semibold text-[#0B4D2B] hover:underline">
+                      View Campaigns <ArrowUpRight size={12} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="mt-10 text-center">
+            <p className="text-gray-500 mb-4">Is your organization raising funds for a cause?</p>
+            <Link 
+              to="/register" 
+              className="inline-flex items-center gap-2 bg-[#0B4D2B] hover:bg-[#065F46] text-white font-bold px-6 py-3 rounded-xl transition-colors"
+            >
+              <Plus size={18} /> Register Your Group
+            </Link>
+          </div>
         </div>
       </section>
 

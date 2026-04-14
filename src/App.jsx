@@ -19,6 +19,7 @@ import TeamFundraisingPage from './pages/TeamFundraisingPage'
 import BlogPage from './pages/BlogPage'
 import FundraisingTipsPage from './pages/FundraisingTipsPage'
 import CharityFundraisingPage from './pages/CharityFundraisingPage'
+import GroupsPage from './pages/GroupsPage'
 
 function ProtectedRoute({ children, roles }) {
   const { user } = useAuth()
@@ -53,6 +54,7 @@ export default function App() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/tips" element={<FundraisingTipsPage />} />
         <Route path="/charity" element={<CharityFundraisingPage />} />
+        <Route path="/groups" element={<GroupsPage />} />
         <Route path="/dashboard" element={
           <ProtectedRoute roles={['user']}>
             <UserDashboard />

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { X, Mail, Phone, MapPin, Calendar, Award, TrendingUp, Heart, Globe, Shield, Clock, DollarSign, CheckCircle, Activity } from 'lucide-react'
 import { formatGHS } from '../data/seed'
 
@@ -16,6 +17,12 @@ const VERIFICATION_STATUS = {
 }
 
 export default function UserDetailModal({ user, onClose, transactions, campaigns }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
   const role = ROLE_LABELS[user.role] || ROLE_LABELS.user
   const verifications = VERIFICATION_STATUS[user.role] || []
   const userTransactions = transactions?.filter(t => t.donor === user.name || t.donor === user.email) || []
@@ -54,7 +61,7 @@ export default function UserDetailModal({ user, onClose, transactions, campaigns
       onClick={e => e.target === e.currentTarget && onClose()}
     >
       <div 
-        style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '672px', maxHeight: '90vh', overflowY: 'auto', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}
+        style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '672px', marginTop: '20px', marginBottom: '20px', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}
       >
         <button
           onClick={onClose}

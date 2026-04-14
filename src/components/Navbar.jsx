@@ -133,6 +133,7 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center gap-6">
           <Link to="/about" className="hidden md:block text-sm font-bold text-gray-700 hover:text-[#02a95c] transition-colors">About</Link>
+          <Link to="/groups" className="hidden md:block text-sm font-bold text-gray-700 hover:text-[#02a95c] transition-colors">Groups</Link>
           
           {user ? (
             <>

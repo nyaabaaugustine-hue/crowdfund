@@ -1,4 +1,27 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { Image as ImageIcon } from 'lucide-react'
+
+function ImageWithFallback({ src, alt, className, style }) {
+  const [hasError, setHasError] = useState(false)
+  
+  if (hasError || !src) {
+    return (
+      <div className={className} style={{ ...style, background: '#F0EDE4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <ImageIcon size={20} className="text-gray-400" />
+      </div>
+    )
+  }
+  
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      style={style}
+      onError={() => setHasError(true)}
+    />
+  )
+}
 import { X, CheckCircle, ChevronRight, Smartphone, CreditCard, AlertCircle, Loader2 } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import { useAuth } from '../context/AuthContext'
@@ -7,20 +30,21 @@ import { formatGHS } from '../data/seed'
 const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_34c930f14bbf8c042864e692beda363b2d40aaf9'
 const SUGGESTED_AMOUNTS = [50, 100, 200, 500, 1000]
 const MOMO_PROVIDERS = [
-  { id: 'mtn', name: 'MTN Mobile Money', short: 'MTN MoMo', color: '#FFC107', channel: 'mobile_money_mtn' },
-  { id: 'telecel', name: 'Telecel Cash', short: 'Telecel', color: '#E60000', channel: 'mobile_money_tigo' },
-  { id: 'airteltigo', name: 'AirtelTigo Money', short: 'AirtelTigo', color: '#FF6600', channel: 'mobile_money_airteltigo' },
+  { id: 'mtn', name: 'MTN Mobile Money', short: 'MTN MoMo', color: '#FFC107', channel: 'mobile_money_mtn', logo: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085018/newmo_vwzw4r.png' },
+  { id: 'telecel', name: 'Telecel Cash', short: 'Telecel', color: '#E60000', channel: 'mobile_money_tigo', logo: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085086/tele_1_wfgluk.png' },
+  { id: 'airteltigo', name: 'AirtelTigo Money', short: 'AirtelTigo', color: '#FF6600', channel: 'mobile_money_airteltigo', logo: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085165/download_1_jclht6.jpg' },
 ]
-
-const MTN_LOGO = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#FFC107"/><path d="M24 12c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" fill="#000"/><text x="24" y="28" text-anchor="middle" font-size="10" font-weight="bold" fill="#000">MTN</text></svg>`
-
-const TELECEL_LOGO = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#E60000"/><text x="24" y="30" text-anchor="middle" font-size="9" font-weight="bold" fill="#fff">TC</text></svg>`
-
-const AIRTELTIGO_LOGO = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#FF6600"/><text x="24" y="28" text-anchor="middle" font-size="7" font-weight="bold" fill="#fff">AT&Tigo</text></svg>`
 
 export default function DonationModal({ campaign, onClose }) {
   const { donate } = useData()
   const { user } = useAuth()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
   const [step, setStep] = useState(1)
   const [amount, setAmount] = useState('')
   const [customAmount, setCustomAmount] = useState('')
@@ -127,11 +151,11 @@ export default function DonationModal({ campaign, onClose }) {
 
   return (
     <div 
-      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '16px', overflowY: 'auto' }}
       onClick={e => e.target === e.currentTarget && onClose()}
     >
       <div 
-        style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '480px', maxHeight: '90vh', overflowY: 'auto', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}
+        style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '480px', marginTop: '20px', marginBottom: '20px', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}
       >
         <button
           onClick={onClose}
@@ -261,7 +285,7 @@ export default function DonationModal({ campaign, onClose }) {
                     onClick={() => setPayMethod(p.id)}
                     className={`momo-option w-full ${payMethod === p.id ? 'selected' : ''}`}
                   >
-                    <span className="w-7 h-7 flex-shrink-0" dangerouslySetInnerHTML={{ __html: p.id === 'mtn' ? MTN_LOGO : p.id === 'telecel' ? TELECEL_LOGO : AIRTELTIGO_LOGO }} />
+                    <ImageWithFallback src={p.logo} alt={p.name} className="w-8 h-8 object-contain rounded-lg flex-shrink-0" style={{ background: '#fff' }} />
                     <span className="text-sm font-semibold text-gray-800">{p.name}</span>
                     {payMethod === p.id && <CheckCircle size={16} className="ml-auto text-[#F6A800]" />}
                   </button>

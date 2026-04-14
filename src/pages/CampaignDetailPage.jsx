@@ -2,14 +2,17 @@ import { useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
   MapPin, Clock, Users, CheckCircle, Share2, Heart, ChevronLeft,
-  Sparkles, MessageCircle, Calendar, TrendingUp, AlertTriangle
+  Sparkles, Calendar, TrendingUp, AlertTriangle, Link2, Facebook, Twitter, Instagram, Linkedin
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import DonationModal from '../components/DonationModal'
+import ImageWithFallback from '../components/ImageWithFallback'
 import { useData } from '../context/DataContext'
 import { useAuth } from '../context/AuthContext'
 import { formatGHS, getProgressPercent, getCategoryStyle } from '../data/seed'
+
+const LOGO_URL = 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776084296/logo_zsmxnf.png'
 
 export default function CampaignDetailPage() {
   const { id } = useParams()
@@ -19,10 +22,11 @@ export default function CampaignDetailPage() {
   const campaign = getCampaignById(id)
 
   const [donateOpen, setDonateOpen] = useState(false)
-  const [tab, setTab] = useState('story') // story | donors | updates
+  const [tab, setTab] = useState('story')
   const [improving, setImproving] = useState(false)
   const [improved, setImproved] = useState(false)
-  const [shareMsg, setShareMsg] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
+  const [linkCopied, setLinkCopied] = useState(false)
 
   if (!campaign) return (
     <div className="min-h-screen bg-[#F9F6EF] flex items-center justify-center">
@@ -36,6 +40,27 @@ export default function CampaignDetailPage() {
 
   const pct = getProgressPercent(campaign.raised, campaign.target)
   const cat = getCategoryStyle(campaign.category)
+  const campaignUrl = typeof window !== 'undefined' ? `${window.location.origin}/campaign/${campaign.id}` : ''
+  const shareTitle = `Support "${campaign.title}" on Nkabom Fund`
+  const shareText = `Help raise funds for ${campaign.title}. Every donation makes a difference!`
+
+  const shareLinks = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(campaignUrl)}&quote=${encodeURIComponent(shareTitle)}`,
+    twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(campaignUrl)}&text=${encodeURIComponent(shareTitle + ' - ' + shareText)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(shareTitle + '\n\n' + campaignUrl)}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(campaignUrl)}`,
+    telegram: `https://t.me/share/url?url=${encodeURIComponent(campaignUrl)}&text=${encodeURIComponent(shareTitle)}`,
+  }
+
+  const handleShare = (platform) => {
+    if (platform === 'copy') {
+      navigator.clipboard.writeText(campaignUrl)
+      setLinkCopied(true)
+      setTimeout(() => setLinkCopied(false), 2000)
+    } else {
+      window.open(shareLinks[platform], '_blank', 'width=600,height=400')
+    }
+  }
 
   const handleImprove = () => {
     setImproving(true)
@@ -44,12 +69,6 @@ export default function CampaignDetailPage() {
       setImproving(false)
       if (ok) setImproved(true)
     }, 2200)
-  }
-
-  const handleShare = () => {
-    navigator.clipboard?.writeText(window.location.href).catch(() => {})
-    setShareMsg(true)
-    setTimeout(() => setShareMsg(false), 2500)
   }
 
   return (
@@ -67,8 +86,13 @@ export default function CampaignDetailPage() {
         {/* LEFT: main content */}
         <div className="lg:col-span-2">
           {/* Hero image */}
-          <div className="relative rounded-3xl overflow-hidden bg-[#F0EDE4] mb-6 aspect-video">
-            <img src={campaign.image} alt={campaign.title} className="w-full h-full object-cover" />
+          <div className="relative rounded-3xl overflow-hidden mb-6 aspect-video">
+            <ImageWithFallback 
+              src={campaign.image} 
+              alt={campaign.title} 
+              className="w-full h-full object-cover"
+              style={{ minHeight: '300px' }}
+            />
             <div className="absolute top-4 left-4 flex gap-2">
               <span className="cat-pill text-white text-xs" style={{ backgroundColor: cat.color }}>
                 {cat.emoji} {cat.label}
@@ -240,11 +264,11 @@ export default function CampaignDetailPage() {
               </button>
 
               <button
-                onClick={handleShare}
+                onClick={() => setShowShareModal(true)}
                 className="w-full border-2 border-[#0B4D2B] text-[#0B4D2B] hover:bg-[#EDFAF2] font-bold py-3 rounded-2xl transition-colors flex items-center justify-center gap-2 text-sm"
               >
                 <Share2 size={16} />
-                {shareMsg ? 'Link Copied!' : 'Share Campaign'}
+                {linkCopied ? 'Link Copied!' : 'Share Campaign'}
               </button>
             </div>
 

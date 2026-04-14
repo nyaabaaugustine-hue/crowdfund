@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Shield, CheckCircle, XCircle, Flag, Users, TrendingUp, Eye, DollarSign, AlertTriangle, Search, Menu, X, UserCircle } from 'lucide-react'
 import Navbar from '../../components/Navbar'
@@ -466,8 +466,8 @@ export default function AdminDashboard() {
 
       {/* Payout confirmation modal */}
       {payoutCamp && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-          <div style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '448px', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '16px', overflowY: 'auto' }}>
+          <div style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '448px', marginTop: '20px', marginBottom: '20px', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}>
             <DollarSign size={32} className="text-[#1E3A5F] mx-auto mb-4" />
             <h2 className="font-display font-bold text-xl text-gray-900 text-center mb-2">Confirm Payout</h2>
             <p className="text-sm text-gray-500 text-center mb-5">Simulate transferring funds for:</p>
