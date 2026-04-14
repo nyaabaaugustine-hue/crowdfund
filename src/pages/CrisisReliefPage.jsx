@@ -11,7 +11,7 @@ import { formatGHS } from '../data/seed'
 const TRUST_MARKS = [
   { icon: ShieldCheck, label: 'ID-Verified Campaigns', desc: 'Every campaign organiser is identity-checked before going live' },
   { icon: Clock, label: '24-Hour Disbursement', desc: 'Approved emergency funds transferred within one business day' },
-  { icon: Zap, label: 'Direct to MoMo', desc: 'Funds arrive directly to the beneficiary's Mobile Money wallet' },
+  { icon: Zap, label: 'Direct to MoMo', desc: "Funds arrive directly to the beneficiary's Mobile Money wallet" },
   { icon: HeartHandshake, label: 'NGO-Partnered', desc: 'Major relief campaigns run in partnership with verified NGOs' },
 ]
 

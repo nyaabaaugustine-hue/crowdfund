@@ -35,6 +35,13 @@ export default function AboutPage() {
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.3) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
         </div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
+          <div className="mb-6">
+            <img 
+              src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776084296/logo_zsmxnf.png" 
+              alt="Nkabom Fund Logo" 
+              className="w-20 h-20 mx-auto object-contain rounded-2xl shadow-2xl"
+            />
+          </div>
           <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full text-sm font-bold mb-6">
             <span className="w-2 h-2 bg-[#F6A800] rounded-full animate-pulse" />
             Our Story
