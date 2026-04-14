@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Shield, CheckCircle, XCircle, Flag, Users, TrendingUp, Eye, DollarSign, AlertTriangle, Search, Menu, X } from 'lucide-react'
+import { Shield, CheckCircle, XCircle, Flag, Users, TrendingUp, Eye, DollarSign, AlertTriangle, Search, Menu, X, UserCircle } from 'lucide-react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import DashboardSidebar from '../../components/DashboardSidebar'
+import UserDetailModal from '../../components/UserDetailModal'
+import CampaignDetailModal from '../../components/CampaignDetailModal'
 import { useAuth } from '../../context/AuthContext'
 import { useData } from '../../context/DataContext'
 import { formatGHS, getProgressPercent, USERS, MONTHLY_DATA, CATEGORIES, PLATFORM_STATS } from '../../data/seed'
@@ -20,6 +22,8 @@ export default function AdminDashboard() {
   const [payoutCamp, setPayoutCamp] = useState(null)
   const [payoutDone, setPayoutDone] = useState(new Set())
   const [actionMsg, setActionMsg] = useState('')
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [selectedCampaign, setSelectedCampaign] = useState(null)
 
   const doAction = (fn, id, msg) => {
     fn(id)
@@ -187,10 +191,25 @@ export default function AdminDashboard() {
                     {filteredCamps.map(c => (
                       <tr key={c.id}>
                         <td>
-                          <Link to={`/campaign/${c.id}`} className="font-medium text-gray-800 hover:text-[#1E3A5F] hover:underline max-w-[180px] block truncate">{c.title}</Link>
+                          <button 
+                            onClick={() => setSelectedCampaign(c)}
+                            className="font-medium text-gray-800 hover:text-[#1E3A5F] hover:underline max-w-[180px] block truncate text-left"
+                          >
+                            {c.title}
+                          </button>
                           <p className="text-[11px] text-gray-400 flex items-center gap-1 mt-0.5"><span>📍</span>{c.location}</p>
                         </td>
-                        <td className="text-gray-600 text-sm">{getCreatorName(c.creatorId)}</td>
+                        <td>
+                          <button 
+                            onClick={() => {
+                              const creator = USERS.find(u => u.id === c.creatorId)
+                              if (creator) setSelectedUser(creator)
+                            }}
+                            className="text-gray-600 text-sm hover:text-[#1E3A5F] hover:underline"
+                          >
+                            {getCreatorName(c.creatorId)}
+                          </button>
+                        </td>
                         <td><span className="cat-pill text-xs bg-[#F0EDE4] text-gray-600 capitalize">{c.category}</span></td>
                         <td>
                           <p className="font-bold text-[#0B4D2B] text-sm">{formatGHS(c.raised)}</p>
@@ -243,7 +262,12 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <h3 className="font-bold text-gray-900">{u.name}</h3>
+                        <button 
+                          onClick={() => setSelectedUser(u)}
+                          className="font-bold text-gray-900 hover:text-[#1E3A5F] hover:underline text-left"
+                        >
+                          {u.name}
+                        </button>
                         <span className="bg-[#F0EDE4] text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded-full capitalize">{u.role}</span>
                       </div>
                       <p className="text-xs text-gray-400 mb-1">{u.email}</p>
@@ -251,9 +275,15 @@ export default function AdminDashboard() {
                       {u.role === 'agent' && <p className="text-xs text-[#7C3AED] font-semibold mt-1">Success Rate: {u.successRate}%</p>}
                       {u.role === 'company' && <p className="text-xs text-[#0B4D2B] font-semibold mt-1">✅ Verified NGO · {u.donorCount?.toLocaleString()} donors</p>}
                     </div>
-                    <div className="text-right">
+                    <div className="flex flex-col items-end gap-2">
                       <p className="text-xs text-gray-400">Joined</p>
                       <p className="text-xs font-semibold text-gray-700">{u.joinedAt}</p>
+                      <button 
+                        onClick={() => setSelectedUser(u)}
+                        className="flex items-center gap-1 text-[10px] font-semibold text-[#1E3A5F] hover:bg-[#EFF6FF] px-2 py-1 rounded-lg transition-colors"
+                      >
+                        <UserCircle size={12} /> View Profile
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -272,7 +302,17 @@ export default function AdminDashboard() {
                     {transactions.map(t => (
                       <tr key={t.id}>
                         <td className="font-mono text-xs text-gray-400">{t.id}</td>
-                        <td className="max-w-[140px]"><Link to={`/campaign/${t.campaignId}`} className="text-sm font-medium text-gray-800 hover:text-[#1E3A5F] hover:underline truncate block">{campaigns.find(c=>c.id===t.campaignId)?.title.slice(0,25)+'...' || '—'}</Link></td>
+                        <td className="max-w-[140px]">
+                          <button 
+                            onClick={() => {
+                              const camp = campaigns.find(c=>c.id===t.campaignId)
+                              if (camp) setSelectedCampaign(camp)
+                            }}
+                            className="text-sm font-medium text-gray-800 hover:text-[#1E3A5F] hover:underline truncate block text-left"
+                          >
+                            {campaigns.find(c=>c.id===t.campaignId)?.title.slice(0,25)+'...' || '—'}
+                          </button>
+                        </td>
                         <td className="text-gray-700">{t.donor}</td>
                         <td className="font-bold text-[#0B4D2B]">{formatGHS(t.amount)}</td>
                         <td><span className="badge-trust">{t.method}</span></td>
@@ -405,10 +445,29 @@ export default function AdminDashboard() {
         </main>
       </div>
 
+      {/* User Detail Modal */}
+      {selectedUser && (
+        <UserDetailModal 
+          user={selectedUser} 
+          onClose={() => setSelectedUser(null)}
+          transactions={transactions}
+          campaigns={campaigns}
+        />
+      )}
+
+      {/* Campaign Detail Modal */}
+      {selectedCampaign && (
+        <CampaignDetailModal 
+          campaign={selectedCampaign} 
+          onClose={() => setSelectedCampaign(null)}
+          transactions={transactions}
+        />
+      )}
+
       {/* Payout confirmation modal */}
       {payoutCamp && (
-        <div className="modal-overlay">
-          <div className="modal-box max-w-md" style={{ borderRadius:'24px', alignSelf:'center' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+          <div style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '448px', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}>
             <DollarSign size={32} className="text-[#1E3A5F] mx-auto mb-4" />
             <h2 className="font-display font-bold text-xl text-gray-900 text-center mb-2">Confirm Payout</h2>
             <p className="text-sm text-gray-500 text-center mb-5">Simulate transferring funds for:</p>

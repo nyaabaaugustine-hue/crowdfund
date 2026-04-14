@@ -64,5 +64,12 @@ export default {
     'anim-fade-up',
     'anim-fade-in',
     'anim-slide-l',
+    'modal-overlay',
+    'modal-box',
+    'momo-option',
+    'amt-btn',
+    'cat-pill',
+    'progress-fill',
+    'success-icon',
   ],
 }

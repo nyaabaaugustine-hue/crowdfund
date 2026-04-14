@@ -1,28 +1,39 @@
-import { useState } from 'react'
-import { X, CheckCircle, ChevronRight, Smartphone, CreditCard, Building2 } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { X, CheckCircle, ChevronRight, Smartphone, CreditCard, AlertCircle, Loader2 } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import { useAuth } from '../context/AuthContext'
 import { formatGHS } from '../data/seed'
 
+const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_34c930f14bbf8c042864e692beda363b2d40aaf9'
 const SUGGESTED_AMOUNTS = [50, 100, 200, 500, 1000]
 const MOMO_PROVIDERS = [
-  { id: 'mtn', name: 'MTN Mobile Money', short: 'MTN MoMo', color: '#FFC107', logo: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085018/newmo_vwzw4r.png' },
-  { id: 'telecel', name: 'Telecel Cash', short: 'Telecel', color: '#E60000', logo: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085086/tele_1_wfgluk.png' },
-  { id: 'airteltigo', name: 'AirtelTigo Money', short: 'AirtelTigo', color: '#FF6600', logo: 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776085165/download_1_jclht6.jpg' },
+  { id: 'mtn', name: 'MTN Mobile Money', short: 'MTN MoMo', color: '#FFC107', channel: 'mobile_money_mtn' },
+  { id: 'telecel', name: 'Telecel Cash', short: 'Telecel', color: '#E60000', channel: 'mobile_money_tigo' },
+  { id: 'airteltigo', name: 'AirtelTigo Money', short: 'AirtelTigo', color: '#FF6600', channel: 'mobile_money_airteltigo' },
 ]
+
+const MTN_LOGO = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#FFC107"/><path d="M24 12c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z" fill="#000"/><text x="24" y="28" text-anchor="middle" font-size="10" font-weight="bold" fill="#000">MTN</text></svg>`
+
+const TELECEL_LOGO = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#E60000"/><text x="24" y="30" text-anchor="middle" font-size="9" font-weight="bold" fill="#fff">TC</text></svg>`
+
+const AIRTELTIGO_LOGO = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#FF6600"/><text x="24" y="28" text-anchor="middle" font-size="7" font-weight="bold" fill="#fff">AT&Tigo</text></svg>`
 
 export default function DonationModal({ campaign, onClose }) {
   const { donate } = useData()
   const { user } = useAuth()
-  const [step, setStep] = useState(1) // 1=amount, 2=method, 3=confirm, 4=success
+  const [step, setStep] = useState(1)
   const [amount, setAmount] = useState('')
   const [customAmount, setCustomAmount] = useState('')
   const [payMethod, setPayMethod] = useState('mtn')
-  const [payType, setPayType] = useState('momo') // momo | card
+  const [payType, setPayType] = useState('momo')
   const [momoNumber, setMomoNumber] = useState(user?.phone || '')
   const [name, setName] = useState(user?.name || '')
+  const [email, setEmail] = useState(user?.email || '')
   const [anonymous, setAnonymous] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [ref, setRef] = useState('')
+  const paystackRef = useRef(null)
 
   const finalAmount = customAmount ? Number(customAmount) : Number(amount)
   const selectedProvider = MOMO_PROVIDERS.find(p => p.id === payMethod)
@@ -33,31 +44,102 @@ export default function DonationModal({ campaign, onClose }) {
   }
 
   const handleNext = () => {
-    if (step === 1 && finalAmount >= 1) setStep(2)
-    else if (step === 2) setStep(3)
+    setError('')
+    if (step === 1) {
+      if (finalAmount < 1) {
+        setError('Please enter a valid amount')
+        return
+      }
+      if (!email) {
+        setError('Please enter your email address')
+        return
+      }
+      setStep(2)
+    } else if (step === 2) {
+      if (payType === 'momo' && momoNumber.length < 10) {
+        setError('Please enter a valid Mobile Money number')
+        return
+      }
+      setStep(3)
+    }
   }
 
-  const handleConfirm = () => {
+  const loadPaystack = () => {
+    return new Promise((resolve) => {
+      if (window.PaystackPop) {
+        resolve()
+        return
+      }
+      const script = document.createElement('script')
+      script.src = 'https://js.paystack.co/v2/inline.js'
+      script.onload = () => resolve()
+      script.onerror = () => resolve()
+      document.body.appendChild(script)
+    })
+  }
+
+  const handleConfirm = async () => {
     setLoading(true)
-    setTimeout(() => {
-      donate(campaign.id, finalAmount, anonymous ? 'Anonymous' : name, selectedProvider?.short || 'Card')
+    setError('')
+
+    try {
+      await loadPaystack()
+
+      if (!window.PaystackPop) {
+        setError('Payment system not loaded. Please refresh and try again.')
+        setLoading(false)
+        return
+      }
+
+      const paymentRef = `NKF_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      setRef(paymentRef)
+
+      const paystack = window.PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: email,
+        amount: finalAmount * 100,
+        currency: 'GHS',
+        ref: paymentRef,
+        channels: payType === 'momo' ? ['mobile_money'] : ['card'],
+        metadata: {
+          campaignId: campaign.id,
+          campaignTitle: campaign.title,
+          donorName: anonymous ? 'Anonymous' : name,
+          mobile_number: momoNumber,
+          payMethod: payType,
+        },
+        callback: (response) => {
+          donate(campaign.id, finalAmount, anonymous ? 'Anonymous' : name, selectedProvider?.short || 'Card')
+          setStep(4)
+          setLoading(false)
+        },
+        onClose: () => {
+          setLoading(false)
+        },
+      })
+
+      paystack.openIframe()
+    } catch (err) {
+      setError('Payment failed to initialize. Please try again.')
       setLoading(false)
-      setStep(4)
-    }, 1800)
+    }
   }
 
   return (
-    <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="modal-box relative">
-        {/* Close */}
+    <div 
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}
+      onClick={e => e.target === e.currentTarget && onClose()}
+    >
+      <div 
+        style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '480px', maxHeight: '90vh', overflowY: 'auto', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}
+      >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F0EDE4] flex items-center justify-center hover:bg-[#E5DFD3] transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F0EDE4] flex items-center justify-center hover:bg-[#E5DFD3] transition-colors z-10"
         >
           <X size={16} />
         </button>
 
-        {/* Step 4: Success */}
         {step === 4 && (
           <div className="text-center py-4">
             <div className="success-icon w-20 h-20 bg-[#EDFAF2] rounded-full flex items-center justify-center mx-auto mb-5">
@@ -70,11 +152,11 @@ export default function DonationModal({ campaign, onClose }) {
             <p className="font-semibold text-gray-800 text-sm mb-5">"{campaign.title}"</p>
             <div className="bg-[#F9F6EF] rounded-2xl p-4 mb-6 text-left">
               <p className="text-xs text-gray-500">Payment Reference</p>
-              <p className="font-mono text-sm font-bold text-gray-800">GHC-{Date.now().toString().slice(-8)}</p>
-              <p className="text-xs text-gray-400 mt-1">Simulated · No real payment made</p>
+              <p className="font-mono text-sm font-bold text-gray-800">{ref}</p>
+              <p className="text-xs text-gray-400 mt-1">Processed via Paystack</p>
             </div>
             <p className="text-xs text-gray-400 mb-6">
-              Your generosity makes a real difference. A receipt has been sent to your email.
+              Your generosity makes a real difference. A receipt has been sent to {email}.
             </p>
             <button
               onClick={onClose}
@@ -85,12 +167,23 @@ export default function DonationModal({ campaign, onClose }) {
           </div>
         )}
 
-        {/* Step 1: Amount */}
         {step === 1 && (
           <>
             <div className="mb-6">
               <p className="text-xs font-bold text-[#0B4D2B] uppercase tracking-wider mb-1">Donating to</p>
               <h2 className="font-display font-bold text-xl text-gray-900 leading-snug line-clamp-2">{campaign.title}</h2>
+            </div>
+
+            <div className="mb-4">
+              <label className="text-xs text-gray-500 font-medium mb-1.5 block">Your email address</label>
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="gh-input"
+                required
+              />
             </div>
 
             <p className="text-sm font-semibold text-gray-700 mb-3">Choose an amount</p>
@@ -106,7 +199,7 @@ export default function DonationModal({ campaign, onClose }) {
               ))}
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4">
               <label className="text-xs text-gray-500 font-medium mb-1.5 block">Or enter custom amount</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">₵</span>
@@ -121,9 +214,15 @@ export default function DonationModal({ campaign, onClose }) {
               </div>
             </div>
 
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-red-600 text-sm">
+                <AlertCircle size={16} />
+                {error}
+              </div>
+            )}
+
             <button
               onClick={handleNext}
-              disabled={finalAmount < 1}
               className="w-full bg-[#0B4D2B] disabled:bg-gray-200 disabled:text-gray-400 text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-colors"
             >
               Continue <ChevronRight size={18} />
@@ -131,7 +230,6 @@ export default function DonationModal({ campaign, onClose }) {
           </>
         )}
 
-        {/* Step 2: Payment method */}
         {step === 2 && (
           <>
             <button onClick={() => setStep(1)} className="text-xs text-[#0B4D2B] font-semibold mb-4 flex items-center gap-1">
@@ -140,7 +238,6 @@ export default function DonationModal({ campaign, onClose }) {
             <h2 className="font-display font-bold text-xl text-gray-900 mb-1">Payment Method</h2>
             <p className="text-sm text-gray-400 mb-5">Donating <span className="font-bold text-[#0B4D2B]">{formatGHS(finalAmount)}</span></p>
 
-            {/* Type tabs */}
             <div className="flex gap-2 mb-4 p-1 bg-[#F0EDE4] rounded-xl">
               <button
                 onClick={() => setPayType('momo')}
@@ -164,11 +261,7 @@ export default function DonationModal({ campaign, onClose }) {
                     onClick={() => setPayMethod(p.id)}
                     className={`momo-option w-full ${payMethod === p.id ? 'selected' : ''}`}
                   >
-                    {p.logo.startsWith('http') ? (
-                      <img src={p.logo} className="w-7 h-7 object-contain" alt={p.short} />
-                    ) : (
-                      <span className="text-2xl">{p.logo}</span>
-                    )}
+                    <span className="w-7 h-7 flex-shrink-0" dangerouslySetInnerHTML={{ __html: p.id === 'mtn' ? MTN_LOGO : p.id === 'telecel' ? TELECEL_LOGO : AIRTELTIGO_LOGO }} />
                     <span className="text-sm font-semibold text-gray-800">{p.name}</span>
                     {payMethod === p.id && <CheckCircle size={16} className="ml-auto text-[#F6A800]" />}
                   </button>
@@ -179,20 +272,19 @@ export default function DonationModal({ campaign, onClose }) {
                   value={momoNumber}
                   onChange={e => setMomoNumber(e.target.value)}
                   className="gh-input mt-3"
+                  maxLength={10}
                 />
               </div>
             ) : (
               <div className="space-y-3 mb-4">
-                <input placeholder="Card number" className="gh-input" readOnly value="•••• •••• •••• ••••" />
-                <div className="grid grid-cols-2 gap-3">
-                  <input placeholder="MM/YY" className="gh-input" readOnly value="12/27" />
-                  <input placeholder="CVV" className="gh-input" readOnly value="•••" />
+                <div className="bg-[#F9F6EF] rounded-xl p-4 text-center">
+                  <CreditCard size={24} className="mx-auto mb-2 text-gray-400" />
+                  <p className="text-sm text-gray-600">Card payment will open a secure Paystack form</p>
                 </div>
-                <p className="text-xs text-gray-400">Demo mode — no real card required</p>
               </div>
             )}
 
-            <div className="mb-5">
+            <div className="mb-4">
               <label className="text-xs font-medium text-gray-600 mb-1.5 block">Your name (for donor list)</label>
               <input
                 className="gh-input"
@@ -207,6 +299,13 @@ export default function DonationModal({ campaign, onClose }) {
               </label>
             </div>
 
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-red-600 text-sm">
+                <AlertCircle size={16} />
+                {error}
+              </div>
+            )}
+
             <button
               onClick={handleNext}
               className="w-full bg-[#0B4D2B] text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-colors hover:bg-[#0F6035]"
@@ -216,7 +315,6 @@ export default function DonationModal({ campaign, onClose }) {
           </>
         )}
 
-        {/* Step 3: Confirm */}
         {step === 3 && (
           <>
             <button onClick={() => setStep(2)} className="text-xs text-[#0B4D2B] font-semibold mb-4 flex items-center gap-1">
@@ -236,7 +334,7 @@ export default function DonationModal({ campaign, onClose }) {
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Method</span>
                 <span className="font-semibold text-gray-800">
-                  {payType === 'momo' ? selectedProvider?.name : 'Credit/Debit Card'}
+                  {payType === 'momo' ? `${selectedProvider?.name} (${momoNumber})` : 'Credit/Debit Card'}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
@@ -251,9 +349,16 @@ export default function DonationModal({ campaign, onClose }) {
               </div>
             </div>
 
-            <p className="text-xs text-gray-400 mb-5 text-center">
-              🔒 This is a demo. No real payment will be processed.
+            <p className="text-xs text-gray-400 mb-5 text-center flex items-center justify-center gap-1">
+              🔒 Secured by Paystack
             </p>
+
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-red-600 text-sm">
+                <AlertCircle size={16} />
+                {error}
+              </div>
+            )}
 
             <button
               onClick={handleConfirm}
@@ -262,11 +367,11 @@ export default function DonationModal({ campaign, onClose }) {
             >
               {loading ? (
                 <>
-                  <span className="w-4 h-4 border-2 border-[#3D2A00]/40 border-t-[#3D2A00] rounded-full animate-spin" />
+                  <Loader2 size={20} className="animate-spin" />
                   Processing...
                 </>
               ) : (
-                <>Confirm & Donate {formatGHS(finalAmount)}</>
+                <>Confirm & Pay {formatGHS(finalAmount)}</>
               )}
             </button>
           </>

@@ -291,7 +291,7 @@ export default function CampaignDetailPage() {
       </div>
 
       <Footer />
-      {donateOpen && campaign.status === 'approved' && (
+      {donateOpen && (
         <DonationModal campaign={campaign} onClose={() => setDonateOpen(false)} />
       )}
     </div>
