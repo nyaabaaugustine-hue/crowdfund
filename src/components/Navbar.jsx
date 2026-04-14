@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Menu, X, Bell, ChevronDown, LogOut, LayoutDashboard, Search } from 'lucide-react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Menu, X, Bell, ChevronDown, LogOut, LayoutDashboard, Search, Share2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useData } from '../context/DataContext'
+
+const LOGO_URL = 'https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776084296/logo_zsmxnf.png'
 
 const ROLE_DASH = { user: '/dashboard', agent: '/agent', company: '/company', admin: '/admin' }
 const ROLE_COLORS = { user: '#0B4D2B', agent: '#7C3AED', company: '#065F46', admin: '#1E3A5F' }
@@ -254,7 +256,7 @@ export default function Navbar() {
         <div className="md:hidden bg-white border-t border-[#F0EDE4] px-4 py-4 flex flex-col gap-3 anim-fade-in">
           <Link to="/explore" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2 flex items-center gap-2"><Search size={16}/> Search</Link>
           <Link to="/explore" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">Donate</Link>
-          <Link to={user ? ROLE_DASH[user.role] : "/login"} onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">Fundraise</Link>
+          <Link to="/groups" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">Groups</Link>
           <Link to="/about" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">About</Link>
           {!user && (
             <Link to="/login" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-gray-700 py-2">Sign in</Link>

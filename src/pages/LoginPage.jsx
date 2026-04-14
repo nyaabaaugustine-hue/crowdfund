@@ -68,6 +68,7 @@ export default function LoginPage() {
 
     setLoading(true)
     setTimeout(() => {
+      const selectedType = USER_TYPES.find(t => t.id === registerData.role)
       const newUser = {
         id: `user-${Date.now()}`,
         role: registerData.role,
@@ -75,7 +76,7 @@ export default function LoginPage() {
         email: registerData.email,
         phone: registerData.phone,
         avatar: registerData.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
-        avatarColor: ROLES.find(r => r.id === registerData.role)?.color || '#0B4D2B',
+        avatarColor: selectedType?.color || '#0B4D2B',
         location: 'Ghana',
         joinedAt: new Date().toISOString().split('T')[0],
         totalDonated: 0,
@@ -84,7 +85,8 @@ export default function LoginPage() {
         donations: [],
       }
       register(newUser)
-      navigate('/dashboard')
+      const dash = { user: '/dashboard', agent: '/agent', company: '/company', admin: '/admin' }
+      navigate(dash[registerData.role] || '/dashboard')
     }, 800)
   }
 
