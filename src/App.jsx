@@ -21,6 +21,8 @@ import FundraisingTipsPage from './pages/FundraisingTipsPage'
 import CharityFundraisingPage from './pages/CharityFundraisingPage'
 import GroupsPage from './pages/GroupsPage'
 import GroupDetailPage from './pages/GroupDetailPage'
+import AuthPage from './pages/auth'
+import AccountPage from './pages/account'
 
 function ProtectedRoute({ children, roles }) {
   const { user } = useAuth()
@@ -57,6 +59,8 @@ export default function App() {
         <Route path="/charity" element={<CharityFundraisingPage />} />
         <Route path="/groups" element={<GroupsPage />} />
         <Route path="/groups/:id" element={<GroupDetailPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/account" element={<AccountPage />} />
         <Route path="/dashboard" element={
           <ProtectedRoute roles={['user']}>
             <UserDashboard />

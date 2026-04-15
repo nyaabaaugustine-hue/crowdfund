@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useData } from '../context/DataContext'
 import { User, Briefcase, Building2, Shield, ArrowRight, CheckCircle, Heart, Mail, Lock, Eye, EyeOff, Users, Phone, Facebook, Twitter, Instagram, Linkedin, Link2, ChevronDown, X } from 'lucide-react'
@@ -226,6 +226,15 @@ export default function LoginPage() {
                   </div>
                   {errors.signin && <p className="text-red-500 text-xs">{errors.signin}</p>}
                   <button type="submit" disabled={loading} className="w-full bg-[#0B4D2B] hover:bg-[#065F46] text-white font-bold py-3.5 rounded-xl transition-all text-sm disabled:opacity-60">
+                    {loading ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" /> : 'Sign In'}
+                  </button>
+                  <p className="text-center text-xs text-gray-500">
+                    Or sign in with{' '}
+                    <Link to="/auth" className="text-[#0B4D2B] font-semibold hover:underline">
+                      Neon Auth
+                    </Link>
+                  </p>
+                  <div className="relative py-2"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#E5DFD3]" /></div><div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">or quick demo login</span></div></div>
                     {loading ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" /> : 'Sign In'}
                   </button>
                   <div className="relative py-2"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#E5DFD3]" /></div><div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">or quick demo login</span></div></div>
