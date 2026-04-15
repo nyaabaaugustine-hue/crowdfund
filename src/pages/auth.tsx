@@ -1,5 +1,4 @@
-import { AuthView } from '@neondatabase/auth-ui'
-import { DefaultLink } from '@neondatabase/auth-ui'
+import { AuthView, DefaultLink } from '@neondatabase/auth/react/ui'
 
 export { DefaultLink }
 

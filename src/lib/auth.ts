@@ -1,7 +1,7 @@
-import { createAuthClient } from '@neondatabase/server'
+import { createAuthClient } from '@neondatabase/neon-js'
 
 const auth = createAuthClient({
-  neonAuthUrl: import.meta.env.VITE_NEON_AUTH_URL,
+  authUrl: import.meta.env.VITE_NEON_AUTH_URL,
 })
 
 export default auth
