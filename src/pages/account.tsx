@@ -1,14 +1,12 @@
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import auth from '../lib/auth'
 
 export default function Account() {
-  const { user, setUser } = useAuth()
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
 
-  const handleSignOut = async () => {
-    await auth.signOut()
-    setUser(null)
+  const handleSignOut = () => {
+    logout()
     navigate('/')
   }
 
@@ -28,12 +26,17 @@ export default function Account() {
           <div className="flex items-center gap-6 mb-8">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
               <span className="text-3xl font-bold text-green-700">
-                {user.email?.charAt(0).toUpperCase()}
+                {user.name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase()}
               </span>
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Account</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{user.name || 'User'}</h1>
               <p className="text-gray-600">{user.email}</p>
+              {user.role && (
+                <span className="inline-block mt-1 px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full capitalize">
+                  {user.role}
+                </span>
+              )}
             </div>
           </div>
 
@@ -43,10 +46,12 @@ export default function Account() {
               <p className="font-medium text-gray-900">{user.email}</p>
             </div>
 
-            <div className="p-4 bg-gray-50 rounded-xl">
-              <p className="text-sm text-gray-500">User ID</p>
-              <p className="font-medium text-gray-900">{user.id}</p>
-            </div>
+            {user.id && (
+              <div className="p-4 bg-gray-50 rounded-xl">
+                <p className="text-sm text-gray-500">User ID</p>
+                <p className="font-medium text-gray-900 font-mono text-sm">{user.id}</p>
+              </div>
+            )}
           </div>
 
           <div className="mt-8 flex gap-4">
