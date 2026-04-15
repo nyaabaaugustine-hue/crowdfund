@@ -1,0 +1,408 @@
+// Prisma schema for Nkabom Fund
+// Neon PostgreSQL Database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============================================
+// USER & AUTH
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  phone         String?
+  avatar        String?
+  role          UserRole  @default(USER)
+  verified      Boolean   @default(false)
+  kycStatus     KycStatus @default(PENDING)
+  kycDocuments  Json?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  campaigns     Campaign[]
+  donations     Donation[]
+  transactions  Transaction[]
+  messages      ContactMessage[]
+  aiLogs        AiLog[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  USER
+  AGENT
+  COMPANY
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum KycStatus {
+  PENDING
+  SUBMITTED
+  VERIFIED
+  REJECTED
+}
+
+// ============================================
+// CAMPAIGNS
+// ============================================
+
+model Campaign {
+  id          String         @id @default(cuid())
+  title       String
+  story       String
+  summary     String?
+  image       String
+  category    String
+  target      Decimal        @db.Decimal(12, 2)
+  raised      Decimal        @default(0) @db.Decimal(12, 2)
+  currency    String         @default("GHS")
+  status      CampaignStatus @default(DRAFT)
+  featured    Boolean        @default(false)
+  
+  // Organizer
+  organizerId String
+  organizer   User           @relation(fields: [organizerId], references: [id])
+  
+  // Dates
+  deadline    DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  publishedAt DateTime?
+
+  // Relations
+  donations   Donation[]
+  updates     CampaignUpdate[]
+  withdraws   Withdrawal[]
+  reports     CampaignReport[]
+
+  @@index([status])
+  @@index([organizerId])
+  @@index([category])
+  @@map("campaigns")
+}
+
+enum CampaignStatus {
+  DRAFT
+  PENDING_REVIEW
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  SUSPENDED
+}
+
+model CampaignUpdate {
+  id          String   @id @default(cuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  title       String
+  content     String
+  image       String?
+  createdAt   DateTime @default(now())
+
+  @@map("campaign_updates")
+}
+
+model CampaignReport {
+  id          String   @id @default(cuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  reporterId  String
+  reason      String
+  details     String?
+  status      ReportStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  resolvedAt  DateTime?
+
+  @@map("campaign_reports")
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  DISMISSED
+  ACTION_TAKEN
+}
+
+// ============================================
+// PAYMENTS & DONATIONS
+// ============================================
+
+model Donation {
+  id          String          @id @default(cuid())
+  campaignId  String
+  campaign    Campaign        @relation(fields: [campaignId], references: [id])
+  donorId     String?
+  donor       User?           @relation(fields: [donorId], references: [id])
+  
+  amount      Decimal         @db.Decimal(12, 2)
+  currency    String          @default("GHS")
+  method      PaymentMethod
+  status      DonationStatus  @default(PENDING)
+  
+  // Donor info (for guest donations)
+  donorName   String?
+  donorEmail  String?
+  donorPhone  String?
+  
+  // Paystack reference
+  reference   String?         @unique
+  paystackRef String?
+  
+  anonymous   Boolean         @default(false)
+  message     String?
+  
+  createdAt   DateTime        @default(now())
+  confirmedAt DateTime?
+
+  @@index([campaignId])
+  @@index([donorId])
+  @@index([status])
+  @@map("donations")
+}
+
+enum PaymentMethod {
+  MTN_MOMO
+  VODAFONE_CASH
+  AIRTELTIGO_MONEY
+  CARD
+  BANK_TRANSFER
+}
+
+enum DonationStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Transaction {
+  id          String           @id @default(cuid())
+  campaignId  String
+  userId      String?
+  user        User?            @relation(fields: [userId], references: [id])
+  
+  type        TransactionType
+  amount      Decimal          @db.Decimal(12, 2)
+  currency    String           @default("GHS")
+  status      TransactionStatus @default(PENDING)
+  
+  reference   String?          @unique
+  description String?
+  
+  createdAt   DateTime         @default(now())
+  completedAt DateTime?
+
+  @@map("transactions")
+}
+
+enum TransactionType {
+  DONATION
+  WITHDRAWAL
+  REFUND
+  PLATFORM_FEE
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model Withdrawal {
+  id          String            @id @default(cuid())
+  campaignId  String
+  campaign    Campaign          @relation(fields: [campaignId], references: [id])
+  
+  amount      Decimal           @db.Decimal(12, 2)
+  currency    String            @default("GHS")
+  method      PaymentMethod
+  status      WithdrawalStatus  @default(PENDING)
+  
+  bankName    String?
+  accountNumber String?
+  mobileWallet String?
+  
+  processedAt DateTime?
+  notes       String?
+  
+  createdAt   DateTime          @default(now())
+
+  @@map("withdrawals")
+}
+
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  PROCESSING
+  COMPLETED
+  REJECTED
+}
+
+// ============================================
+// GROUPS & COMMUNITIES
+// ============================================
+
+model Group {
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  type        GroupType
+  image       String?
+  location    String?
+  memberCount Int         @default(0)
+  createdAt   DateTime    @default(now())
+
+  members     GroupMember[]
+  campaigns   Campaign[]  @relation("GroupCampaigns")
+
+  @@map("groups")
+}
+
+enum GroupType {
+  SCHOOL_ALUMNI
+  CHURCH
+  PROFESSIONAL
+  COMMUNITY
+  SPORTS
+  OTHER
+}
+
+model GroupMember {
+  id        String     @id @default(cuid())
+  groupId   String
+  group     Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId    String?
+  email     String
+  name      String
+  role      GroupRole  @default(MEMBER)
+  joinedAt  DateTime   @default(now())
+
+  @@unique([groupId, email])
+  @@map("group_members")
+}
+
+enum GroupRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+// ============================================
+// COMMUNICATIONS
+// ============================================
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  status    MessageStatus @default(UNREAD)
+  
+  repliedAt DateTime?
+  reply     String?
+  
+  createdAt DateTime @default(now())
+
+  @@map("contact_messages")
+}
+
+enum MessageStatus {
+  UNREAD
+  READ
+  REPLIED
+  CLOSED
+}
+
+// ============================================
+// SITE SETTINGS
+// ============================================
+
+model SiteSettings {
+  id           String  @id @default("default")
+  siteName     String  @default("Nkabom Fund")
+  tagline      String?
+  logoUrl      String?
+  favicon      String?
+  contactEmail String
+  contactPhone String?
+  address      String?
+  socialLinks  Json?
+  
+  updatedAt    DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+model PageContent {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  content   Json     // Flexible content structure
+  seo       Json?    // metaTitle, metaDescription, etc.
+  status    String   @default("published")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("page_content")
+}
+
+// ============================================
+// AI AGENT LOGGING
+// ============================================
+
+model AiLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  
+  action    String   // Tool name that was called
+  input     Json     // Tool input
+  output    Json?    // Tool output
+  success   Boolean
+  
+  ipAddress String?
+  userAgent String?
+  
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("ai_logs")
+}
+
+// ============================================
+// ANALYTICS (Optional future expansion)
+// ============================================
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  userId    String?
+  device    String?
+  country   String?
+  createdAt DateTime @default(now())
+
+  @@index([path])
+  @@index([createdAt])
+  @@map("page_views")
+}
