@@ -60,13 +60,15 @@ export const USERS = [
   {
     id: 'admin-001',
     role: 'admin',
-    name: 'System Admin',
-    email: 'admin@ghcrowd.com',
+    name: 'Admin Super',
+    email: 'admin@nkabomfund.com',
     phone: '+233 30 000 0001',
-    avatar: 'SA',
+    avatar: 'AS',
     avatarColor: '#1E3A5F',
-    location: 'GhCrowd HQ, Accra',
+    location: 'Nkabom Fund HQ, Accra',
     joinedAt: '2023-01-01',
+    level: 'super',
+    accessCode: 'NKA2024SUPER',
   },
 ];
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { GraduationCap, Church, UsersRound, Building2, Plus, ArrowUpRight, Search, Users, TrendingUp, CheckCircle, ChevronRight } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { GraduationCap, Church, UsersRound, Building2, Plus, ArrowUpRight, Search, Users, TrendingUp, CheckCircle, ChevronRight, Heart } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import ImageWithFallback from '../components/ImageWithFallback'
@@ -40,9 +40,9 @@ const GROUPS = {
 }
 
 const GROUP_TYPE_CONFIG = {
-  alumni: { icon: GraduationCap, color: '#1E3A5F', bg: '#EFF6FF', label: 'School Alumni', description: 'Old school associations raising funds for alma maters and fellow alumni' },
-  churches: { icon: Church, color: '#7C3AED', bg: '#F5F3FF', label: 'Church Groups', description: 'Churches and religious organizations supporting communities' },
-  associations: { icon: UsersRound, color: '#0B4D2B', bg: '#EDFAF2', label: 'Professional Associations', description: 'Trade unions and professional bodies supporting members' },
+  alumni: { icon: GraduationCap, color: '#1E3A5F', bg: '#EFF6FF', label: 'School Alumni', description: 'Old school associations raising funds for alma maters, scholarships, and fellow alumni in need' },
+  churches: { icon: Church, color: '#7C3AED', bg: '#F5F3FF', label: 'Church Groups', description: 'Churches and religious organizations supporting communities through outreach and charity' },
+  associations: { icon: UsersRound, color: '#0B4D2B', bg: '#EDFAF2', label: 'Professional Associations', description: 'Trade unions and professional bodies supporting members with welfare programs' },
 }
 
 const STATS = [
@@ -165,65 +165,68 @@ export default function GroupsPage() {
 
         {/* Groups Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredGroups().map(group => (
-            <div 
-              key={group.id}
-              className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-warm hover:shadow-warm-lg hover:-translate-y-1 transition-all duration-300 group"
-            >
-              {/* Image */}
-              <div className="relative h-44 overflow-hidden">
-                <ImageWithFallback 
-                  src={group.image}
-                  alt={group.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute top-3 left-3">
-                  <span className="bg-white/95 backdrop-blur text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
-                    {group.type === 'Alumni' && <GraduationCap size={12} />}
-                    {group.type === 'Church' && <Church size={12} />}
-                    {group.type === 'Association' && <UsersRound size={12} />}
-                    {group.type}
-                  </span>
-                </div>
-                <div className="absolute bottom-3 left-3 right-3">
-                  <h3 className="text-white font-bold leading-tight line-clamp-2">{group.name}</h3>
-                  <p className="text-white/80 text-xs mt-1 flex items-center gap-1">
-                    <Building2 size={12} /> {group.location}
-                  </p>
+          {filteredGroups().map(group => {
+            const TypeIcon = group.type === 'Alumni' ? GraduationCap : group.type === 'Church' ? Church : UsersRound
+            return (
+              <div 
+                key={group.id}
+                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-warm hover:shadow-warm-lg hover:-translate-y-1 transition-all duration-300 group"
+              >
+                {/* Image - Clickable */}
+                <Link to={`/groups/${group.id}`} className="block">
+                  <div className="relative h-44 overflow-hidden">
+                    <ImageWithFallback 
+                      src={group.image}
+                      alt={group.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                    <div className="absolute top-3 left-3">
+                      <span className="bg-white/95 backdrop-blur text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
+                        <TypeIcon size={12} />
+                        {group.type}
+                      </span>
+                    </div>
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <h3 className="text-white font-bold leading-tight line-clamp-2">{group.name}</h3>
+                      <p className="text-white/80 text-xs mt-1 flex items-center gap-1">
+                        <Building2 size={12} /> {group.location}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* Content */}
+                <div className="p-5">
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="text-center p-2 bg-gray-50 rounded-xl">
+                      <p className="font-bold text-gray-900 text-sm">{group.members}</p>
+                      <p className="text-[10px] text-gray-500">Members</p>
+                    </div>
+                    <div className="text-center p-2 bg-gray-50 rounded-xl">
+                      <p className="font-bold text-[#0B4D2B] text-sm">{group.campaigns}</p>
+                      <p className="text-[10px] text-gray-500">Campaigns</p>
+                    </div>
+                    <div className="text-center p-2 bg-gray-50 rounded-xl">
+                      <p className="font-bold text-[#F6A800] text-xs">{group.raised}</p>
+                      <p className="text-[10px] text-gray-500">Raised</p>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    <Link to={`/groups/${group.id}`} className="flex-1 flex items-center justify-center gap-1.5 bg-[#0B4D2B] hover:bg-[#065F46] text-white font-semibold text-sm py-2.5 rounded-xl transition-colors">
+                      View Details <ChevronRight size={14} />
+                    </Link>
+                    <button className="px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                      <Heart size={18} className="text-gray-400" />
+                    </button>
+                  </div>
                 </div>
               </div>
-
-              {/* Content */}
-              <div className="p-5">
-                {/* Stats */}
-                <div className="grid grid-cols-3 gap-2 mb-4">
-                  <div className="text-center p-2 bg-gray-50 rounded-xl">
-                    <p className="font-bold text-gray-900 text-sm">{group.members}</p>
-                    <p className="text-[10px] text-gray-500">Members</p>
-                  </div>
-                  <div className="text-center p-2 bg-gray-50 rounded-xl">
-                    <p className="font-bold text-[#0B4D2B] text-sm">{group.campaigns}</p>
-                    <p className="text-[10px] text-gray-500">Campaigns</p>
-                  </div>
-                  <div className="text-center p-2 bg-gray-50 rounded-xl">
-                    <p className="font-bold text-[#F6A800] text-xs">{group.raised}</p>
-                    <p className="text-[10px] text-gray-500">Raised</p>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <button className="flex-1 flex items-center justify-center gap-1.5 bg-[#0B4D2B] hover:bg-[#065F46] text-white font-semibold text-sm py-2.5 rounded-xl transition-colors">
-                    View Campaigns <ChevronRight size={14} />
-                  </button>
-                  <button className="px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
-                    <Heart size={18} className="text-gray-400" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Empty State */}
@@ -245,16 +248,16 @@ export default function GroupsPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link 
-              to="/register"
+              to="/login?tab=register"
               className="inline-flex items-center gap-2 bg-[#F6A800] hover:bg-[#D48E00] text-[#3D2A00] font-bold px-6 py-3 rounded-xl transition-colors"
             >
               <Plus size={18} /> Register Your Group
             </Link>
             <Link 
-              to="/contact"
+              to="/login"
               className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 font-semibold px-6 py-3 rounded-xl transition-colors"
             >
-              Contact Us
+              Sign In
             </Link>
           </div>
         </div>

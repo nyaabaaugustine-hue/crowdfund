@@ -18,11 +18,12 @@ export default function CampaignDetailModal({ campaign, onClose, transactions })
 
   return (
     <div 
-      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '16px', overflowY: 'auto' }}
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 9999, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '16px', overflowY: 'auto', scrollBehavior: 'smooth', overscrollBehavior: 'contain' }}
       onClick={e => e.target === e.currentTarget && onClose()}
     >
       <div 
-        style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '672px', marginTop: '20px', marginBottom: '20px', padding: '32px 24px 40px', animation: 'fadeUp 0.3s ease-out', position: 'relative' }}
+        style={{ background: 'white', borderRadius: '24px 24px 0 0', width: '100%', maxWidth: '672px', padding: '32px 24px 40px', animation: 'slideDown 0.3s ease-out', position: 'relative', marginTop: 'auto' }}
+        className="sm:!rounded-3xl sm:!mt-8 sm:!mb-auto"
       >
         <button
           onClick={onClose}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useData } from '../context/DataContext'
 import { User, Briefcase, Building2, Shield, ArrowRight, CheckCircle, Heart, Mail, Lock, Eye, EyeOff, Users, Phone, Facebook, Twitter, Instagram, Linkedin, Link2, ChevronDown, X } from 'lucide-react'
@@ -14,15 +14,26 @@ const USER_TYPES = [
   { id: 'admin', icon: Shield, label: 'Admin', desc: 'Platform administration', color: '#1E3A5F' },
 ]
 
+const DEMO_CREDENTIALS = {
+  user: { email: 'ama.mensah@gmail.com', password: 'demo123', name: 'Ama Mensah' },
+  agent: { email: 'kofi.boateng@ghcrowd.com', password: 'demo123', name: 'Kofi Boateng' },
+  company: { email: 'info@hopefoundation.org.gh', password: 'demo123', name: 'Hope Foundation Ghana' },
+  admin: { email: 'admin@nkabomfund.com', password: 'NKA2024SUPER', name: 'Admin Super' },
+}
+
 export default function LoginPage() {
   const { login, register } = useAuth()
   const { addCampaign } = useData()
   const navigate = useNavigate()
-  const [tab, setTab] = useState('signin')
+  const [searchParams] = useSearchParams()
+  const initialTab = searchParams.get('tab') === 'register' ? 'register' : 'signin'
+  const [tab, setTab] = useState(initialTab)
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
+  const [showCredentials, setShowCredentials] = useState(false)
+  const [selectedCreds, setSelectedCreds] = useState(null)
 
   const [signinData, setSigninData] = useState({ email: '', password: '' })
   const [registerData, setRegisterData] = useState({ name: '', email: '', phone: '', password: '', role: 'user' })
@@ -33,11 +44,17 @@ export default function LoginPage() {
   }, [])
 
   const handleDemoLogin = (roleId) => {
+    const creds = DEMO_CREDENTIALS[roleId]
+    setSigninData({ email: creds.email, password: creds.password })
+    setSelectedCreds(roleId)
+  }
+
+  const handleLoginWithCreds = () => {
     setLoading(true)
     setTimeout(() => {
-      login(roleId)
+      login(selectedCreds)
       const dash = { user: '/dashboard', agent: '/agent', company: '/company', admin: '/admin' }
-      navigate(dash[roleId])
+      navigate(dash[selectedCreds])
     }, 800)
   }
 
@@ -183,34 +200,46 @@ export default function LoginPage() {
               {tab === 'signin' && (
                 <form onSubmit={handleSignIn} className="space-y-3 sm:space-y-4">
                   <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Email</label>
                     <input
                       type="email"
-                      placeholder="Email address"
+                      placeholder="Enter your email"
                       value={signinData.email}
                       onChange={e => setSigninData({ ...signinData, email: e.target.value })}
                       className="w-full px-4 py-3.5 rounded-xl border border-[#E5DFD3] focus:border-[#0B4D2B] focus:ring-2 focus:ring-[#0B4D2B]/20 outline-none text-sm"
                     />
                   </div>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Password"
-                      value={signinData.password}
-                      onChange={e => setSigninData({ ...signinData, password: e.target.value })}
-                      className="w-full px-4 py-3.5 pr-12 rounded-xl border border-[#E5DFD3] focus:border-[#0B4D2B] focus:ring-2 focus:ring-[#0B4D2B]/20 outline-none text-sm"
-                    />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Password</label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Enter your password"
+                        value={signinData.password}
+                        onChange={e => setSigninData({ ...signinData, password: e.target.value })}
+                        className="w-full px-4 py-3.5 pr-12 rounded-xl border border-[#E5DFD3] focus:border-[#0B4D2B] focus:ring-2 focus:ring-[#0B4D2B]/20 outline-none text-sm"
+                      />
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
                   </div>
                   {errors.signin && <p className="text-red-500 text-xs">{errors.signin}</p>}
                   <button type="submit" disabled={loading} className="w-full bg-[#0B4D2B] hover:bg-[#065F46] text-white font-bold py-3.5 rounded-xl transition-all text-sm disabled:opacity-60">
                     {loading ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" /> : 'Sign In'}
                   </button>
-                  <div className="relative py-2"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#E5DFD3]" /></div><div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">or demo</span></div></div>
-                  <button type="button" onClick={() => handleDemoLogin('user')} className="w-full bg-[#EDFAF2] text-[#0B4D2B] font-semibold py-3 rounded-xl text-sm flex items-center justify-center gap-2">
-                    <User size={16} /> Demo User
-                  </button>
+                  <div className="relative py-2"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#E5DFD3]" /></div><div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">or quick demo login</span></div></div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {USER_TYPES.map(type => {
+                      const Icon = type.icon
+                      return (
+                        <button key={type.id} type="button" onClick={() => handleDemoLogin(type.id)} className={`p-2 rounded-xl border text-center transition-all ${selectedCreds === type.id ? 'border-[#0B4D2B] bg-[#EDFAF2]' : 'border-[#E5DFD3] bg-white hover:bg-gray-50'}`}>
+                          <Icon size={16} className="mx-auto mb-0.5" style={{ color: type.color }} />
+                          <span className="text-[9px] font-medium text-gray-600 capitalize">{type.label.split(' ')[0]}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
                 </form>
               )}
 
@@ -279,18 +308,56 @@ export default function LoginPage() {
             {/* Demo Roles */}
             {tab === 'signin' && (
               <div className="mt-4">
-                <p className="text-center text-xs text-gray-500 mb-2">Quick demo access</p>
-                <div className="grid grid-cols-3 gap-2">
+                <p className="text-center text-xs text-gray-500 mb-2">Click to use demo credentials</p>
+                <div className="grid grid-cols-4 gap-2">
                   {USER_TYPES.map(type => {
                     const Icon = type.icon
+                    const isSelected = selectedCreds === type.id
                     return (
-                      <button key={type.id} onClick={() => handleDemoLogin(type.id)} className="p-2.5 rounded-xl border border-[#E5DFD3] bg-white text-center hover:bg-gray-50 transition-all">
+                      <button 
+                        key={type.id} 
+                        onClick={() => handleDemoLogin(type.id)} 
+                        className={`p-2.5 rounded-xl border text-center transition-all ${isSelected ? 'border-[#0B4D2B] bg-[#EDFAF2]' : 'border-[#E5DFD3] bg-white hover:bg-gray-50'}`}
+                      >
                         <Icon size={18} className="mx-auto mb-1" style={{ color: type.color }} />
                         <span className="text-[10px] font-medium text-gray-600">{type.label}</span>
                       </button>
                     )
                   })}
                 </div>
+                
+                {/* Credentials Display */}
+                {selectedCreds && DEMO_CREDENTIALS[selectedCreds] && (
+                  <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-xs font-bold text-gray-700">Demo Credentials</p>
+                      <button onClick={() => setShowCredentials(!showCredentials)} className="text-xs text-[#0B4D2B] font-medium">
+                        {showCredentials ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                    <div className="space-y-2 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Email:</span>
+                        <span className="font-mono text-gray-800">{showCredentials ? DEMO_CREDENTIALS[selectedCreds].email : '••••••••••@•••.com'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Password:</span>
+                        <span className="font-mono text-gray-800">{showCredentials ? DEMO_CREDENTIALS[selectedCreds].password : '••••••••'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Role:</span>
+                        <span className="font-medium text-gray-800 capitalize">{selectedCreds}</span>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={handleLoginWithCreds}
+                      disabled={loading}
+                      className="w-full mt-3 bg-[#0B4D2B] hover:bg-[#065F46] text-white font-bold py-2.5 rounded-xl text-xs transition-colors disabled:opacity-60"
+                    >
+                      {loading ? 'Signing in...' : 'Login as ' + selectedCreds}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -319,8 +386,8 @@ export default function LoginPage() {
 
       {/* Share Modal */}
       {showShareModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowShareModal(false)}>
-          <div className="bg-white rounded-2xl p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center p-4 overflow-y-auto" onClick={() => setShowShareModal(false)}>
+          <div className="bg-white rounded-t-2xl sm:rounded-2xl p-6 w-full max-w-sm mt-0 sm:mt-8 mb-auto sm:mb-auto" onClick={e => e.stopPropagation()}>
             <div className="flex items-center gap-3 mb-4">
               <img src={LOGO_URL} alt="Logo" className="w-10 h-10 object-contain" />
               <div>

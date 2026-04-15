@@ -1,17 +1,20 @@
 import { Link } from 'react-router-dom'
-import { Heart, Facebook, Twitter, Instagram, Mail, Phone } from 'lucide-react'
+import { Heart, Facebook, Twitter, Instagram, Mail, Phone, Shield, MapPin, ExternalLink } from 'lucide-react'
 
 export default function Footer() {
   return (
     <footer className="bg-[#0B4D2B] text-white mt-20">
       <div className="kente-bar opacity-60" />
+
+      {/* Main Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
         {/* Brand */}
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <img 
-              src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776084296/logo_zsmxnf.png" 
-              alt="Nkabom Fund Logo" 
+            <img
+              src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1776084296/logo_zsmxnf.png"
+              alt="Nkabom Fund Logo"
               className="w-10 h-10 object-contain"
             />
             <span className="font-display font-bold text-white text-xl">Nkabom Fund</span>
@@ -20,21 +23,54 @@ export default function Footer() {
             Ghana's most trusted crowdfunding platform. Raising funds for the things that matter most — together.
           </p>
           <div className="flex gap-3">
-            {[Facebook, Twitter, Instagram].map((Icon, i) => (
-              <a key={i} href="#" className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
-                <Icon size={16} />
-              </a>
-            ))}
+            <a
+              href="https://facebook.com/nkabomfund"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+              aria-label="Facebook"
+            >
+              <Facebook size={16} />
+            </a>
+            <a
+              href="https://twitter.com/nkabomfund"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+              aria-label="Twitter"
+            >
+              <Twitter size={16} />
+            </a>
+            <a
+              href="https://instagram.com/nkabomfund"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+              aria-label="Instagram"
+            >
+              <Instagram size={16} />
+            </a>
           </div>
         </div>
 
-        {/* Platform */}
+        {/* Platform Links */}
         <div>
           <h4 className="font-bold text-sm uppercase tracking-wider text-[#F6A800] mb-4">Platform</h4>
           <ul className="space-y-2.5">
-            {['How it Works','Start a Campaign','Explore Campaigns','Success Stories','Our Mission'].map(item => (
-              <li key={item}>
-                <Link to="/explore" className="text-sm text-green-200 hover:text-white transition-colors">{item}</Link>
+            {[
+              { label: 'Explore Campaigns', link: '/explore' },
+              { label: 'Start a Campaign', link: '/start' },
+              { label: 'How it Works', link: '/about' },
+              { label: 'Groups', link: '/groups' },
+              { label: 'Success Stories', link: '/blog' },
+            ].map(item => (
+              <li key={item.label}>
+                <Link
+                  to={item.link}
+                  className="text-sm text-green-200 hover:text-white transition-colors"
+                >
+                  {item.label}
+                </Link>
               </li>
             ))}
           </ul>
@@ -44,74 +80,137 @@ export default function Footer() {
         <div>
           <h4 className="font-bold text-sm uppercase tracking-wider text-[#F6A800] mb-4">Categories</h4>
           <ul className="space-y-2.5">
-            {['🏥 Medical','🕊️ Funeral','🎓 Education','💼 Business','🆘 Emergency','🤝 Community'].map(item => (
-              <li key={item}>
-                <Link to="/explore" className="text-sm text-green-200 hover:text-white transition-colors">{item}</Link>
+            {[
+              { label: 'Medical', emoji: '🏥', link: '/explore?cat=medical' },
+              { label: 'Funeral', emoji: '🕊️', link: '/explore?cat=funeral' },
+              { label: 'Education', emoji: '🎓', link: '/explore?cat=education' },
+              { label: 'Business', emoji: '💼', link: '/explore?cat=business' },
+              { label: 'Emergency', emoji: '🆘', link: '/explore?cat=emergency' },
+              { label: 'Community', emoji: '🤝', link: '/explore?cat=community' },
+            ].map(item => (
+              <li key={item.label}>
+                <Link
+                  to={item.link}
+                  className="text-sm text-green-200 hover:text-white transition-colors"
+                >
+                  {item.emoji} {item.label}
+                </Link>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Contact */}
+        {/* Contact & Trust */}
         <div>
           <h4 className="font-bold text-sm uppercase tracking-wider text-[#F6A800] mb-4">Contact</h4>
-          <ul className="space-y-3">
+          <ul className="space-y-3 mb-6">
             <li className="flex items-center gap-3 text-sm text-green-200">
               <Mail size={15} className="flex-shrink-0" />
-              hello@ghcrowd.com.gh
+              hello@nkabomfund.com.gh
             </li>
             <li className="flex items-center gap-3 text-sm text-green-200">
               <Phone size={15} className="flex-shrink-0" />
               +233 30 291 0001
             </li>
+            <li className="flex items-center gap-3 text-sm text-green-200">
+              <MapPin size={15} className="flex-shrink-0" />
+              Accra, Ghana
+            </li>
           </ul>
-          <div className="mt-6 p-4 rounded-2xl bg-white/10">
-            <p className="text-xs text-green-200 mb-3">All campaigns are verified by our team. Funds are disbursed only to approved campaigns.</p>
+          <div className="p-4 rounded-2xl bg-white/10">
+            <p className="text-xs text-green-200 mb-3 leading-relaxed">
+              All campaigns are verified by our team. Funds are disbursed only to approved campaigns.
+            </p>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-full bg-[#F6A800] flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-[#F6A800] flex items-center justify-center flex-shrink-0">
                 <span className="text-[10px] text-[#0B4D2B] font-bold">✓</span>
               </div>
-              <span className="text-xs font-semibold text-[#F6A800]">Trusted & Secure Platform</span>
+              <span className="text-xs font-semibold text-[#F6A800]">Trusted &amp; Secure Platform</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="border-t border-white/10 px-4 py-5">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-green-300">
-          <p>© 2024 Nkabom Fund. All rights reserved. 🇬🇭</p>
-          
-          <div className="flex items-center gap-4 grayscale opacity-50 hover:opacity-100 transition-opacity">
-            <svg className="h-6 w-auto" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="80" height="24" rx="4" fill="#FFCC00"/>
-              <text x="40" y="16" textAnchor="middle" fill="#000" fontSize="10" fontWeight="bold" fontFamily="Arial">MTN MoMo</text>
-            </svg>
-            <svg className="h-6 w-auto" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="80" height="24" rx="4" fill="#E60000"/>
-              <text x="40" y="16" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" fontFamily="Arial">Telecel Cash</text>
-            </svg>
-            <svg className="h-6 w-auto" viewBox="0 0 90 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="90" height="24" rx="4" fill="#000"/>
-              <text x="45" y="16" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold" fontFamily="Arial">AirtelTigo</text>
-            </svg>
-            <svg className="h-5 w-auto" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="60" height="20" rx="3" fill="white"/>
-              <text x="30" y="14" textAnchor="middle" fill="#1A1F71" fontSize="8" fontWeight="bold" fontFamily="Arial">VISA</text>
-            </svg>
-            <svg className="h-5 w-auto" viewBox="0 0 40 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="40" height="25" rx="4" fill="white"/>
-              <circle cx="15" cy="12.5" r="8" fill="#EB001B"/>
-              <circle cx="25" cy="12.5" r="8" fill="#F79E1B"/>
-              <path d="M20 6.5C21.5 7.9 22.5 9.9 22.5 12.5C22.5 15.1 21.5 17.1 20 18.5C18.5 17.1 17.5 15.1 17.5 12.5C17.5 9.9 18.5 7.9 20 6.5Z" fill="#FF5F00"/>
-            </svg>
-          </div>
+      {/* Payment Methods + Bottom Bar */}
+      <div className="border-t border-white/10">
 
-          <div className="flex gap-5">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+        {/* Payment Logos */}
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <p className="text-xs font-bold text-green-300 uppercase tracking-widest text-center mb-4">
+            Accepted Payment Methods
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+
+            {/* MTN MoMo */}
+            <div className="relative h-10 w-24 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600" />
+              <div className="relative h-full flex flex-col items-center justify-center">
+                <span className="text-black font-bold text-sm tracking-tight">MTN</span>
+                <span className="text-black/70 text-[8px] font-medium -mt-0.5">MoMo</span>
+              </div>
+            </div>
+
+            {/* Telecel Cash */}
+            <div className="relative h-10 w-28 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-500 via-red-600 to-red-700" />
+              <div className="relative h-full flex flex-col items-center justify-center">
+                <span className="text-white font-bold text-xs tracking-wide">Telecel</span>
+                <span className="text-white/80 text-[8px] font-medium -mt-0.5">Cash</span>
+              </div>
+            </div>
+
+            {/* AirtelTigo Money */}
+            <div className="relative h-10 w-32 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600" />
+              <div className="relative h-full flex flex-col items-center justify-center">
+                <span className="text-white font-bold text-[10px] tracking-wide">AirtelTigo</span>
+                <span className="text-white/80 text-[8px] font-medium -mt-0.5">Money</span>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="h-8 w-px bg-white/20 flex-shrink-0" />
+
+            {/* Visa */}
+            <div className="relative h-10 w-16 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-800 via-blue-900 to-blue-950" />
+              <div className="relative h-full flex items-center justify-center">
+                <span className="text-white font-bold text-sm tracking-wider">VISA</span>
+              </div>
+            </div>
+
+            {/* Mastercard */}
+            <div className="relative h-10 w-14 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-950" />
+              <div className="relative h-full flex items-center justify-center gap-0.5">
+                <div className="w-5 h-5 rounded-full bg-red-500 opacity-90" />
+                <div className="w-5 h-5 rounded-full bg-yellow-500 opacity-90 -ml-2" />
+              </div>
+            </div>
+
+            {/* Paystack */}
+            <div className="relative h-10 w-24 rounded-lg overflow-hidden shadow-lg flex-shrink-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00C3F7] via-[#00A3E4] to-[#0077B6]" />
+              <div className="relative h-full flex items-center justify-center">
+                <span className="text-white font-bold text-xs tracking-wide">Paystack</span>
+              </div>
+            </div>
+
           </div>
         </div>
+
+        {/* Copyright Row */}
+        <div className="max-w-7xl mx-auto px-4 pb-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
+          <p className="text-xs text-green-300">
+            © {new Date().getFullYear()} Nkabom Fund. All rights reserved. 🇬🇭
+          </p>
+          <div className="flex gap-5 text-xs">
+            <a href="#" className="text-green-300 hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="text-green-300 hover:text-white transition-colors">Terms of Service</a>
+            <a href="#" className="text-green-300 hover:text-white transition-colors">Cookie Policy</a>
+          </div>
+        </div>
+
       </div>
     </footer>
   )

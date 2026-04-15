@@ -133,9 +133,26 @@ export default function Navbar() {
         <div className="flex-1" />
 
         {/* Right side */}
-        <div className="flex items-center gap-6">
-          <Link to="/about" className="hidden md:block text-sm font-bold text-gray-700 hover:text-[#02a95c] transition-colors">About</Link>
-          <Link to="/groups" className="hidden md:block text-sm font-bold text-gray-700 hover:text-[#02a95c] transition-colors">Groups</Link>
+        <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
+          <Link to="/about" className="hidden md:block text-xs lg:text-sm font-bold text-gray-700 hover:text-[#02a95c] transition-colors">About</Link>
+          <Link to="/groups" className="hidden md:block text-xs lg:text-sm font-bold text-gray-700 hover:text-[#02a95c] transition-colors">Groups</Link>
+          
+          {/* Share Button */}
+          <button 
+            onClick={() => {
+              const shareUrl = window.location.origin
+              const shareTitle = 'Nkabom Fund - Ghana crowdfunding'
+              if (navigator.share) {
+                navigator.share({ title: shareTitle, url: shareUrl })
+              } else {
+                navigator.clipboard.writeText(shareUrl)
+              }
+            }}
+            className="p-2 rounded-lg hover:bg-[#F0EDE4] transition-colors"
+            title="Share"
+          >
+            <Share2 size={18} className="text-gray-600" />
+          </button>
           
           {user ? (
             <>

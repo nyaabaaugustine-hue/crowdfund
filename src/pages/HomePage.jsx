@@ -435,7 +435,7 @@ export default function HomePage() {
           <div className="mt-10 text-center">
             <p className="text-gray-500 mb-4">Is your organization raising funds for a cause?</p>
             <Link 
-              to="/register" 
+              to="/login?tab=register" 
               className="inline-flex items-center gap-2 bg-[#0B4D2B] hover:bg-[#065F46] text-white font-bold px-6 py-3 rounded-xl transition-colors"
             >
               <Plus size={18} /> Register Your Group

@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import DonationModal from '../components/DonationModal'
 import ImageWithFallback from '../components/ImageWithFallback'
+import ShareModal from '../components/ShareModal'
 import { useData } from '../context/DataContext'
 import { useAuth } from '../context/AuthContext'
 import { formatGHS, getProgressPercent, getCategoryStyle } from '../data/seed'
@@ -26,7 +27,7 @@ export default function CampaignDetailPage() {
   const [improving, setImproving] = useState(false)
   const [improved, setImproved] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
-  const [linkCopied, setLinkCopied] = useState(false)
+  const [linkCopied, setLinkCopied] = useState(false)  // kept for inline button label
 
   if (!campaign) return (
     <div className="min-h-screen bg-[#F9F6EF] flex items-center justify-center">
@@ -44,23 +45,7 @@ export default function CampaignDetailPage() {
   const shareTitle = `Support "${campaign.title}" on Nkabom Fund`
   const shareText = `Help raise funds for ${campaign.title}. Every donation makes a difference!`
 
-  const shareLinks = {
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(campaignUrl)}&quote=${encodeURIComponent(shareTitle)}`,
-    twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(campaignUrl)}&text=${encodeURIComponent(shareTitle + ' - ' + shareText)}`,
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(shareTitle + '\n\n' + campaignUrl)}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(campaignUrl)}`,
-    telegram: `https://t.me/share/url?url=${encodeURIComponent(campaignUrl)}&text=${encodeURIComponent(shareTitle)}`,
-  }
-
-  const handleShare = (platform) => {
-    if (platform === 'copy') {
-      navigator.clipboard.writeText(campaignUrl)
-      setLinkCopied(true)
-      setTimeout(() => setLinkCopied(false), 2000)
-    } else {
-      window.open(shareLinks[platform], '_blank', 'width=600,height=400')
-    }
-  }
+  // shareLinks / handleShare handled inside <ShareModal />
 
   const handleImprove = () => {
     setImproving(true)
@@ -286,19 +271,69 @@ export default function CampaignDetailPage() {
               </div>
             </div>
 
-            {/* Trust indicators */}
-            <div className="bg-[#EDFAF2] rounded-2xl p-5 border border-[#D0F0DF]">
-              <h4 className="text-xs font-bold text-[#0B4D2B] uppercase tracking-wider mb-3">Why Trust This Campaign</h4>
-              <ul className="space-y-2">
-                {[
-                  campaign.verified ? '✅ Identity verified by Nkabom Fund' : '🔄 Identity verification pending',
-                  '🔒 Funds held securely until disbursement',
-                  '📊 Full donor & transaction reports',
-                  '📱 Mobile Money disbursement',
-                ].map((item, i) => (
-                  <li key={i} className="text-xs text-gray-700">{item}</li>
-                ))}
-              </ul>
+            {/* Premium Trust Badge */}
+            <div className="bg-gradient-to-br from-[#0B4D2B] to-[#065F46] rounded-2xl p-6 text-white overflow-hidden relative">
+              {/* Background Pattern */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-white transform translate-x-8 -translate-y-8" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full bg-white transform -translate-x-6 translate-y-6" />
+              </div>
+              
+              <div className="relative">
+                {/* Header */}
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
+                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg">Trust & Safety</h4>
+                    <p className="text-white/70 text-xs">Verified by Nkabom Fund</p>
+                  </div>
+                </div>
+
+                {/* Verified Badge - Stand Out */}
+                {campaign.verified && (
+                  <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#F6A800] flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm">✅ Identity Verified</p>
+                      <p className="text-white/80 text-xs">Campaign creator has been verified by our team</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Trust Features */}
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { icon: '🔒', title: 'Secure Funds', desc: 'Held safely until goal is met' },
+                    { icon: '📊', title: 'Transparent', desc: 'Full donor & transaction reports' },
+                    { icon: '📱', title: 'Mobile Money', desc: 'Fast disbursement to organizer' },
+                    { icon: '✓', title: 'Verified', desc: 'Creator identity confirmed' },
+                  ].map((item, i) => (
+                    <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-base">{item.icon === '✓' ? '✓' : item.icon}</span>
+                        <span className="font-semibold text-sm">{item.title}</span>
+                      </div>
+                      <p className="text-white/60 text-[10px] leading-tight">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bottom Badge */}
+                <div className="mt-4 flex items-center justify-center gap-2 pt-4 border-t border-white/20">
+                  <div className="w-5 h-5 rounded-full bg-[#F6A800] flex items-center justify-center">
+                    <span className="text-[10px] text-white font-bold">✓</span>
+                  </div>
+                  <span className="text-xs font-medium text-white/90">Backed by Nkabom Fund Guarantee</span>
+                </div>
+              </div>
             </div>
 
             {campaign.status === 'pending' && (
@@ -321,68 +356,7 @@ export default function CampaignDetailPage() {
 
       {/* Share Modal */}
       {showShareModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowShareModal(false)}>
-          <div className="bg-white rounded-2xl p-5 sm:p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center gap-3 mb-4">
-              <img src={LOGO_URL} alt="Logo" className="w-10 h-10 object-contain" />
-              <div>
-                <h3 className="font-bold text-gray-900">Share this Campaign</h3>
-                <p className="text-xs text-gray-500">Help raise awareness!</p>
-              </div>
-            </div>
-            
-            {/* Campaign Preview */}
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl mb-4">
-              <img src={campaign.image} alt="" className="w-12 h-12 rounded-lg object-cover" />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">{campaign.title}</p>
-                <p className="text-xs text-[#0B4D2B] font-bold">{formatGHS(campaign.raised)} raised</p>
-              </div>
-            </div>
-
-            {/* Social Share Buttons */}
-            <div className="grid grid-cols-4 gap-2 mb-4">
-              {[
-                { icon: Facebook, label: 'Facebook', color: '#1877F2', platform: 'facebook' },
-                { icon: Twitter, label: 'X', color: '#000', platform: 'twitter' },
-                { icon: Linkedin, label: 'LinkedIn', color: '#0A66C2', platform: 'linkedin' },
-                { icon: () => <svg viewBox="0 0 24 24" className="w-5 h-5" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>, label: 'WhatsApp', color: '#25D366', platform: 'whatsapp' },
-              ].map((social, i) => (
-                <button 
-                  key={i} 
-                  onClick={() => handleShare(social.platform)} 
-                  className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-all"
-                >
-                  <social.icon size={22} style={{ color: social.color }} />
-                  <span className="text-[10px] text-gray-600 font-medium">{social.label}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Copy Link */}
-            <div className="flex gap-2">
-              <input 
-                type="text" 
-                readOnly 
-                value={campaignUrl} 
-                className="flex-1 px-3 py-2.5 rounded-xl border border-[#E5DFD3] text-xs bg-gray-50" 
-              />
-              <button 
-                onClick={() => handleShare('copy')} 
-                className="px-4 py-2.5 bg-[#0B4D2B] text-white rounded-xl text-xs font-medium hover:bg-[#065F46] transition-colors"
-              >
-                {linkCopied ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
-            
-            <button 
-              onClick={() => setShowShareModal(false)} 
-              className="w-full mt-3 py-2 text-gray-500 text-sm font-medium"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <ShareModal campaign={campaign} onClose={() => setShowShareModal(false)} />
       )}
     </div>
   )
